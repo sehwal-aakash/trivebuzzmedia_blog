@@ -88,7 +88,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 - Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
 - Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
-  - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
+    - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
 
 === php rules ===
 
@@ -154,3 +154,739 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Do NOT delete tests without approval.
 
 </laravel-boost-guidelines>
+
+# Gemini.md
+
+## Project Overview
+
+You are building a production-ready, scalable multi-author blog publishing platform called **TriveBuzzMedia**.
+
+The platform is focused on:
+
+- SEO ranking
+- AI-assisted content publishing
+- Multi-author blogging
+- Monetization
+- Modern UI/UX
+- Startup-grade scalability
+- High-performance architecture
+
+The application must be designed like a real startup MVP with clean architecture and long-term scalability.
+
+---
+
+# Primary Goals
+
+1. Build a modern blog publishing platform.
+2. Support approved multi-author publishing.
+3. Build an SEO-first architecture.
+4. Integrate AI content generation workflows.
+5. Create a scalable Laravel architecture.
+6. Build a clean modern UI inspired by Medium, Hashnode, and Notion.
+7. Build a monetization-ready platform.
+
+---
+
+# Tech Stack
+
+## Backend
+
+- Laravel 13
+- PHP 8.4+
+- MySQL
+- Laravel Sanctum
+- Laravel Queues
+- Laravel Cache
+- Laravel Notifications
+- Laravel Scheduler
+- Laravel Policies
+- Service Layer Architecture
+
+## Frontend
+
+- Blade Templates
+- Tailwind CSS v4
+- Alpine.js
+- Responsive Mobile-First Design
+- Dark Mode Support
+
+## Infrastructure Ready
+
+- Redis
+- S3 Compatible Storage
+- Cloudflare CDN
+- Queue Workers
+- Docker
+- Nginx
+- Supervisor
+
+---
+
+# Development Philosophy
+
+You are acting as:
+
+- Senior Full Stack Engineer
+- Startup CTO
+- Laravel Architect
+- Product Engineer
+- Performance Engineer
+- SEO Engineer
+- UI/UX Engineer
+
+Always:
+
+- Think production-first
+- Think scalable-first
+- Think reusable-first
+- Think performance-first
+- Think SEO-first
+- Think maintainability-first
+
+Do NOT generate toy-level code.
+
+Generate startup-grade production-ready code.
+
+---
+
+# Architecture Rules
+
+## Architecture Pattern
+
+Use:
+
+- MVC + Service Layer
+- Repository Pattern where useful
+- Form Requests for validation
+- Policies for authorization
+- Jobs for async processing
+- Events & Listeners
+- API Resources
+- Reusable Blade Components
+- Config-driven architecture
+
+## SOLID Principles
+
+Follow SOLID principles everywhere.
+
+## Clean Code Rules
+
+- Use descriptive variable names.
+- Use typed properties.
+- Use return types.
+- Use small reusable methods.
+- Avoid duplicated logic.
+- Keep controllers thin.
+- Move business logic to services.
+- Use enums where applicable.
+
+---
+
+# Application Modules
+
+The application must contain these modules:
+
+1. Authentication Module
+2. User & Author Management
+3. Blog Publishing System
+4. Category & Tags
+5. SEO System
+6. Comment System
+7. Media Upload System
+8. Admin Dashboard
+9. Author Dashboard
+10. Analytics System
+11. Approval Workflow
+12. AI Content Generation
+13. Notification System
+14. Monetization Layer
+15. Search System
+16. Newsletter System
+
+---
+
+# User Roles
+
+## Roles
+
+- Super Admin
+- Admin
+- Editor
+- Approved Author
+- Pending Author
+- Visitor
+
+## Permissions
+
+### Super Admin
+
+- Full platform access
+
+### Admin
+
+- Manage users
+- Manage authors
+- Manage posts
+- Moderate comments
+- Access analytics
+
+### Editor
+
+- Approve/reject posts
+- Edit content
+- Moderate content
+
+### Approved Author
+
+- Create posts
+- Edit own posts
+- Access author dashboard
+
+### Pending Author
+
+- Register
+- Apply for approval
+- Cannot publish until approved
+
+### Visitor
+
+- Read posts
+- Search posts
+- Comment on posts
+
+Use:
+
+- Policies
+- Middleware
+- Gates
+- Role-based access control
+
+---
+
+# Database Design Rules
+
+Design normalized scalable database schemas.
+
+Always include:
+
+- indexes
+- foreign keys
+- soft deletes where needed
+- timestamps
+- optimized relationships
+
+Use:
+
+- eager loading
+- pagination
+- query optimization
+
+---
+
+# Required Database Tables
+
+Generate scalable migrations for:
+
+- users
+- posts
+- categories
+- tags
+- post_tag
+- comments
+- media
+- author_applications
+- notifications
+- newsletters
+- seo_meta
+- activity_logs
+
+---
+
+# Blog System Requirements
+
+## Blog Features
+
+- Draft posts
+- Published posts
+- Scheduled publishing
+- Featured image uploads
+- SEO fields
+- Slug generation
+- Reading time calculation
+- Related posts
+- Search functionality
+- Featured posts
+- Trending posts
+- Sticky posts
+- Table of contents
+- Markdown support optional
+- AI-generated summary support
+
+## Content Editor
+
+Use a modern rich editor architecture.
+
+Editor must support:
+
+- headings
+- images
+- code blocks
+- embeds
+- tables
+- quotes
+- lists
+- markdown support
+
+---
+
+# Author Workflow
+
+## Registration Flow
+
+1. Visitor registers.
+2. Account verification.
+3. User submits author application.
+4. Admin reviews.
+5. Admin approves/rejects.
+6. Approved author gets dashboard access.
+
+---
+
+# Comment System Requirements
+
+## Features
+
+- Guest comments
+- Logged-in comments
+- Nested replies
+- Spam protection
+- Comment moderation
+- Report comment feature
+- Comment approval queue
+
+---
+
+# Admin Dashboard Requirements
+
+Create a modern SaaS-style admin dashboard.
+
+## Dashboard Features
+
+- Statistics cards
+- User management
+- Author approvals
+- Post moderation
+- Comment moderation
+- SEO analytics
+- Revenue placeholders
+- Activity logs
+- Analytics charts
+- Trending content
+- Notification center
+
+## UI Requirements
+
+- Sidebar layout
+- Responsive design
+- Dark mode
+- Tailwind CSS
+- Modern spacing
+- Clean typography
+- Dashboard widgets
+
+---
+
+# Author Dashboard Requirements
+
+## Features
+
+- Total posts
+- Draft count
+- Published count
+- Total views
+- Analytics chart
+- Create post
+- Edit post
+- Media library
+- AI writing tools
+- SEO suggestions
+
+---
+
+# Public Frontend Requirements
+
+## Public Pages
+
+- Home
+- Blog Listing
+- Blog Details
+- Category Page
+- Author Profile
+- Search Page
+- About
+- Contact
+- Privacy Policy
+- Terms
+
+## UI Inspiration
+
+Design similar to:
+
+- Medium
+- Hashnode
+- Dev.to
+- Notion
+
+## UI/UX Requirements
+
+- Minimal clean UI
+- Smooth animations
+- Sticky navbar
+- Reading progress bar
+- Beautiful typography
+- Dark/light mode
+- Responsive design
+- Featured carousel
+- Trending section
+- Newsletter section
+- Mega footer
+- Search experience
+
+---
+
+# SEO Requirements
+
+The platform must be SEO-first.
+
+## Required SEO Features
+
+- Dynamic meta tags
+- OpenGraph tags
+- Twitter cards
+- Canonical URLs
+- XML sitemap
+- robots.txt
+- Breadcrumbs
+- Structured schema markup
+- Internal linking support
+- Optimized heading hierarchy
+- SEO-friendly URLs
+- Lazy loading
+- Image optimization
+
+---
+
+# AI Integration Requirements
+
+The platform will use Gemini CLI.
+
+## AI Features
+
+- Blog outline generation
+- SEO keyword suggestions
+- Meta description generation
+- Title generation
+- Content summarization
+- AI-assisted drafts
+- Human review before publishing
+
+## AI Architecture
+
+Create:
+
+- AIContentService
+- Prompt templates
+- Queue-based AI generation
+- Content review workflow
+
+AI-generated content must NEVER auto-publish.
+
+---
+
+# API Architecture
+
+Use RESTful API design.
+
+## Public APIs
+
+- GET /api/posts
+- GET /api/posts/{slug}
+- GET /api/categories
+- GET /api/tags
+- POST /api/comments
+
+## Author APIs
+
+- POST /api/author/posts
+- PUT /api/author/posts/{id}
+- DELETE /api/author/posts/{id}
+
+## Admin APIs
+
+- GET /api/admin/dashboard
+- POST /api/admin/approve-author
+- POST /api/admin/reject-author
+
+Use:
+
+- API Resources
+- Validation
+- Sanctum authentication
+- Rate limiting
+
+---
+
+# File Structure Rules
+
+Use scalable modular architecture.
+
+## Backend Structure
+
+app/
+├── Actions/
+├── DTOs/
+├── Enums/
+├── Events/
+├── Exceptions/
+├── Helpers/
+├── Http/
+│ ├── Controllers/
+│ │ ├── Admin/
+│ │ ├── Author/
+│ │ ├── Public/
+│ ├── Middleware/
+│ ├── Requests/
+│ ├── Resources/
+├── Jobs/
+├── Listeners/
+├── Models/
+├── Notifications/
+├── Policies/
+├── Repositories/
+├── Services/
+├── Traits/
+
+resources/
+├── views/
+│ ├── admin/
+│ ├── author/
+│ ├── components/
+│ ├── layouts/
+│ ├── public/
+│ ├── auth/
+
+---
+
+# Laravel Development Rules
+
+Always follow Laravel best practices.
+
+## Required Rules
+
+- Use route model binding.
+- Use eager loading.
+- Use pagination.
+- Use Form Requests.
+- Use Policies.
+- Use Events/Listeners.
+- Use Queue Jobs.
+- Use reusable Blade components.
+- Use API Resources.
+- Use Laravel naming conventions.
+- Use typed properties.
+- Use service classes.
+
+## Avoid
+
+- Fat controllers
+- Duplicated logic
+- Inline SQL
+- Unoptimized queries
+- Massive Blade templates
+- Business logic inside views
+
+---
+
+# Tailwind & UI Rules
+
+## UI Standards
+
+- Use modern SaaS UI.
+- Use generous whitespace.
+- Use beautiful typography.
+- Use responsive layouts.
+- Use grid systems.
+- Use cards.
+- Use smooth hover effects.
+- Use subtle shadows.
+- Use loading states.
+- Use skeleton loaders.
+
+## Dark Mode
+
+All pages must support dark mode.
+
+---
+
+# Security Requirements
+
+Always implement:
+
+- CSRF protection
+- XSS protection
+- Validation everywhere
+- Secure file uploads
+- Rate limiting
+- Policies
+- Middleware
+- Sanitization
+- Access control
+- Secure password hashing
+
+---
+
+# Performance Requirements
+
+Always optimize for performance.
+
+## Required Optimizations
+
+- Eager loading
+- Query optimization
+- Redis caching
+- Queue workers
+- Lazy loading
+- Optimized images
+- CDN readiness
+- Asset optimization
+- Pagination
+- Database indexing
+
+---
+
+# Monetization Requirements
+
+The platform should be monetization-ready.
+
+## Support Future Features
+
+- Google AdSense
+- Sponsored posts
+- Affiliate blocks
+- Premium content
+- Newsletter sponsorships
+- Subscription plans
+
+---
+
+# Testing Rules
+
+Use PestPHP.
+
+Generate:
+
+- Feature tests
+- Unit tests
+- Authentication tests
+- API tests
+- Authorization tests
+
+---
+
+# Deployment Requirements
+
+Generate deployment-ready architecture.
+
+## Production Stack
+
+- Ubuntu Server
+- Nginx
+- PHP-FPM
+- MySQL
+- Redis
+- Supervisor
+- Queue workers
+- SSL
+- Cloudflare
+
+## Include
+
+- Docker setup
+- Nginx config
+- Supervisor config
+- Queue setup
+- Deployment guide
+- Scaling guide
+
+---
+
+# Scalability Requirements
+
+Architect for:
+
+- 100k+ monthly visitors
+- Multiple authors
+- High SEO traffic
+- Future API expansion
+- Future mobile apps
+- Future SaaS features
+
+---
+
+# Output Requirements
+
+When generating code:
+
+1. Generate step-by-step.
+2. Explain architecture first.
+3. Generate complete files.
+4. Include file paths.
+5. Keep code production-ready.
+6. Keep UI modern.
+7. Follow Laravel conventions.
+8. Avoid pseudo-code.
+9. Generate complete implementations.
+10. Generate reusable components.
+
+---
+
+# Generation Workflow
+
+Always generate in this order:
+
+1. Architecture
+2. Database
+3. Models
+4. Authentication
+5. Role system
+6. Services
+7. Blog system
+8. Admin panel
+9. Author panel
+10. Public frontend
+11. APIs
+12. SEO
+13. AI integration
+14. Optimization
+15. Deployment
+
+---
+
+# Final Rule
+
+Always think like:
+
+- Senior Laravel Architect
+- Startup CTO
+- SaaS Engineer
+- SEO Engineer
+- Performance Engineer
+- UI/UX Engineer
+
+The output must feel like:
+
+- a real funded startup MVP
+- scalable from day one
+- production-ready
+- maintainable by a real engineering team
+- optimized for growth and SEO
