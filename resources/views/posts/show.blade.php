@@ -212,28 +212,49 @@
         {{-- More from TriveBuzz --}}
         @if($relatedPosts->count() > 0)
             <section class="mt-32 pt-24 border-t border-surface-100 dark:border-surface-800">
-                <div class="flex items-center justify-between mb-16">
-                    <h3 class="text-3xl font-black text-surface-900 dark:text-white tracking-tight">Recommended Stories</h3>
-                    <div class="h-px flex-1 bg-surface-100 dark:bg-surface-800 ml-8"></div>
+                <div class="flex items-center justify-between mb-10">
+                    <h3 class="text-2xl md:text-3xl font-black text-[#0f1729] dark:text-white tracking-tight">Recommended Stories</h3>
+                    <div class="h-px flex-1 bg-slate-200 dark:bg-slate-800 ml-8"></div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     @foreach($relatedPosts as $related)
-                        <div class="group">
-                            @if($related->featured_image)
-                                <a href="{{ route('posts.show', $related->slug) }}" class="block overflow-hidden rounded-2xl mb-6 shadow-sm border border-surface-100 dark:border-surface-800">
-                                    <img src="{{ Storage::url($related->featured_image) }}" alt="{{ $related->title }}" class="w-full aspect-video object-cover transform group-hover:scale-105 transition-transform duration-500">
-                                </a>
-                            @endif
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="w-6 h-6 rounded-full bg-surface-200 dark:bg-surface-800 flex items-center justify-center text-[8px] font-black text-surface-500 border border-surface-100 dark:border-surface-700">
-                                    {{ substr($related->author->name, 0, 1) }}
+                        @php
+                            $hasRelatedImg = !empty($related->featured_image);
+                            $relatedImgUrl = $hasRelatedImg ? (str_starts_with($related->featured_image, 'http') ? $related->featured_image : Storage::url($related->featured_image)) : null;
+                        @endphp
+                        <article class="group rounded-2xl bg-white dark:bg-[#0f1729] border border-slate-200/80 dark:border-slate-800 p-5 shadow-sm hover:shadow-xl hover:border-[#3c83f6]/40 transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                @if($hasRelatedImg)
+                                    <a href="{{ route('posts.show', $related->slug) }}" class="block overflow-hidden rounded-xl mb-4 border border-slate-200/60 dark:border-slate-800">
+                                        <img 
+                                            src="{{ $relatedImgUrl }}" 
+                                            alt="{{ $related->title }}" 
+                                            onerror="this.onerror=null; this.parentElement.style.display='none';"
+                                            class="w-full aspect-video object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                        >
+                                    </a>
+                                @endif
+                                <div class="flex items-center gap-2 mb-3">
+                                    <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-[#0f1729] to-[#3c83f6] text-white flex items-center justify-center text-[10px] font-bold shadow-xs">
+                                        {{ substr($related->author->name, 0, 1) }}
+                                    </div>
+                                    <span class="text-xs font-bold text-[#0f1729] dark:text-slate-200 truncate">{{ $related->author->name }}</span>
+                                    <span class="text-slate-300 dark:text-slate-700">&bull;</span>
+                                    <span class="text-[11px] font-semibold text-slate-400">{{ $related->reading_time }}m</span>
                                 </div>
-                                <span class="text-xs font-black text-surface-900 dark:text-zinc-200">{{ $related->author->name }}</span>
+                                <h4 class="text-lg font-black text-[#0f1729] dark:text-white leading-snug group-hover:text-[#3c83f6] transition-colors mb-4 font-sans line-clamp-2">
+                                    <a href="{{ route('posts.show', $related->slug) }}">{{ $related->title }}</a>
+                                </h4>
                             </div>
-                            <h4 class="text-xl font-black text-surface-900 dark:text-white leading-tight group-hover:text-brand transition-colors">
-                                <a href="{{ route('posts.show', $related->slug) }}">{{ $related->title }}</a>
-                            </h4>
-                        </div>
+                            <div class="pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+                                <a href="{{ route('category.show', $related->category) }}" class="text-[10px] font-extrabold uppercase tracking-wider text-[#16a249] bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-md border border-emerald-200/40 dark:border-emerald-800/40">
+                                    {{ $related->category->name }}
+                                </a>
+                                <span class="text-xs font-bold text-[#3c83f6] group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                    Read &rarr;
+                                </span>
+                            </div>
+                        </article>
                     @endforeach
                 </div>
             </section>
