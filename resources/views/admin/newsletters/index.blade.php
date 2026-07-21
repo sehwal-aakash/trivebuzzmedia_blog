@@ -1,63 +1,64 @@
-<x-layout>
-    <x-slot:title>
-        Admin: Newsletter Subscribers - {{ config('app.name') }}
-    </x-slot>
+<x-admin-layout title="Newsletter Broadcasting">
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-zinc-900 dark:text-white">Newsletter Subscribers</h1>
-            <a href="{{ route('admin.newsletters.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition ease-in-out duration-150">
-                Send Broadcast
+    <div class="bg-white dark:bg-[#0f1729] rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-base font-black text-[#0f1729] dark:text-white uppercase tracking-wider font-sans">Audience Subscribers</h2>
+                <p class="text-xs font-medium text-slate-400 mt-0.5">Manage email newsletter subscribers and broadcast digests</p>
+            </div>
+            <a href="{{ route('admin.newsletters.create') }}" class="px-4 py-2.5 bg-[#16a249] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md shadow-emerald-600/20 inline-flex items-center gap-1.5 self-start md:self-auto">
+                + Send Broadcast Email
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 rounded-md text-sm">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <div class="bg-white dark:bg-zinc-900 shadow-sm sm:rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-zinc-50 dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700">
-                            <th class="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Email</th>
-                            <th class="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Subscribed At</th>
-                            <th class="px-6 py-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider text-right">Actions</th>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-50/70 dark:bg-slate-900/50 border-b border-slate-200/60 dark:border-slate-800">
+                        <th class="px-6 py-3.5 text-xs font-black text-slate-400 uppercase tracking-wider">Subscriber Email</th>
+                        <th class="px-6 py-3.5 text-xs font-black text-slate-400 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3.5 text-xs font-black text-slate-400 uppercase tracking-wider">Subscribed Date</th>
+                        <th class="px-6 py-3.5 text-xs font-black text-slate-400 uppercase tracking-wider text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    @forelse($subscribers as $sub)
+                        <tr class="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition-colors">
+                            <td class="px-6 py-4 text-sm font-extrabold text-[#0f1729] dark:text-slate-100 font-mono">
+                                {{ $sub->email }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-lg {{ $sub->is_active ? 'bg-emerald-50 text-[#16a249] dark:bg-emerald-950/50' : 'bg-rose-50 text-rose-600 dark:bg-rose-950/50' }}">
+                                    {{ $sub->is_active ? 'Active' : 'Unsubscribed' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-xs font-medium text-slate-400">
+                                {{ $sub->created_at->format('M d, Y') }}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <form action="{{ route('admin.newsletters.destroy', $sub) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to remove this subscriber?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="px-3 py-1.5 bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-600 hover:text-white text-rose-600 text-xs font-bold rounded-lg transition-all">Remove</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
-                        @foreach($subscribers as $sub)
-                            <tr class="hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors">
-                                <td class="px-6 py-4 text-sm font-medium text-zinc-900 dark:text-white">
-                                    {{ $sub->email }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-2 py-1 text-[10px] font-bold uppercase rounded-full 
-                                        {{ $sub->is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' }}">
-                                        {{ $sub->is_active ? 'Active' : 'Unsubscribed' }}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-zinc-500">
-                                    {{ $sub->created_at->format('M d, Y') }}
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <form action="{{ route('admin.newsletters.destroy', $sub) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to remove this subscriber?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 dark:text-red-400 hover:text-red-500 text-sm font-medium">Remove</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="px-6 py-4 border-t border-zinc-200 dark:border-zinc-700">
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center text-slate-400 text-xs italic">
+                                No newsletter subscribers found.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($subscribers->hasPages())
+            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800">
                 {{ $subscribers->links() }}
             </div>
-        </div>
+        @endif
     </div>
-</x-layout>
+
+</x-admin-layout>
+
