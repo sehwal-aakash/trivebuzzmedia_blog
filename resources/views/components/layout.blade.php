@@ -32,7 +32,14 @@
             <meta property="twitter:image" content="{{ $seoTags['og_image'] }}">
         @endif
 
+        @if(isset($seoTags['schema']))
+            <script type="application/ld+json">
+                {!! json_encode($seoTags['schema'], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+            </script>
+        @endif
+
         @if(isset($meta)) {{ $meta }} @endif
+
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
