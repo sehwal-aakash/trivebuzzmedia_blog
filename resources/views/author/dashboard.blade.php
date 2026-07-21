@@ -75,13 +75,14 @@
 
             {{-- Sidebar/Actions --}}
             <div class="space-y-6">
-                <div class="bg-indigo-600 rounded-xl p-6 text-white shadow-lg shadow-indigo-200 dark:shadow-none">
-                    <h3 class="text-lg font-bold mb-2 text-white">AI Writing Assistant</h3>
-                    <p class="text-indigo-100 text-sm mb-6">Need help with a title or an outline? Our AI tools are ready to help you craft your next viral story.</p>
-                    <a href="{{ route('author.posts.create') }}" class="inline-block w-full text-center py-2.5 bg-white text-indigo-600 rounded-lg text-sm font-bold hover:bg-indigo-50 transition-colors">
+                <div class="bg-gradient-to-br from-[#0f1729] to-[#3c83f6] rounded-2xl p-6 text-white shadow-lg shadow-blue-500/10">
+                    <h3 class="text-base font-extrabold mb-2 text-white">AI Writing Assistant</h3>
+                    <p class="text-blue-100 text-xs leading-relaxed mb-6 font-medium">Need help with a title or an outline? Our AI tools are ready to help you craft your next viral story.</p>
+                    <a href="{{ route('author.posts.create') }}" class="inline-block w-full text-center py-3 bg-white text-[#0f1729] rounded-xl text-xs font-black uppercase tracking-wider hover:bg-slate-100 transition-all shadow-sm">
                         Try AI Assistant
                     </a>
                 </div>
+
 
                 <div class="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-6 shadow-sm">
                     <h3 class="font-bold text-zinc-900 dark:text-white mb-4">Quick Links</h3>
