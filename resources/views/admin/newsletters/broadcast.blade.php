@@ -1,57 +1,54 @@
-<x-layout>
-    <x-slot:title>
-        Send Newsletter Broadcast - {{ config('app.name') }}
-    </x-slot>
+<x-admin-layout title="Send Newsletter Broadcast">
 
-    {{-- Head for Trix --}}
     @push('styles')
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
         <style>
-            trix-editor { min-height: 400px !important; }
+            trix-editor { min-height: 350px !important; }
         </style>
     @endpush
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="mb-8">
-            <a href="{{ route('admin.newsletters.index') }}" class="text-sm text-zinc-500 hover:text-zinc-700 flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Back to Subscribers
+    <div class="max-w-4xl">
+        <div class="mb-6">
+            <a href="{{ route('admin.newsletters.index') }}" class="text-xs font-bold text-[#3c83f6] hover:underline flex items-center gap-1.5">
+                &larr; Back to Subscribers
             </a>
-            <h1 class="text-3xl font-bold text-zinc-900 dark:text-white mt-4">New Broadcast</h1>
         </div>
 
-        <div class="bg-white dark:bg-zinc-900 shadow-sm sm:rounded-lg border border-zinc-200 dark:border-zinc-800 p-8">
-            <form action="{{ route('admin.newsletters.broadcast') }}" method="POST">
+        <div class="bg-white dark:bg-[#0f1729] rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 md:p-8">
+            <div class="mb-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                <h2 class="text-base font-black text-[#0f1729] dark:text-white uppercase tracking-wider font-sans">New Audience Broadcast</h2>
+                <p class="text-xs font-medium text-slate-400 mt-0.5">Compose an email update for all active newsletter subscribers</p>
+            </div>
+
+            <form action="{{ route('admin.newsletters.broadcast') }}" method="POST" class="space-y-6">
                 @csrf
 
-                <div class="space-y-6">
-                    <div>
-                        <label for="subject" class="block text-sm font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-widest mb-2">Email Subject</label>
-                        <input type="text" name="subject" id="subject" value="{{ old('subject') }}" required class="w-full rounded-xl border-zinc-300 dark:border-zinc-700 dark:bg-zinc-950 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 font-bold" placeholder="e.g. Weekly Digest: Top Stories You Missed">
-                        @error('subject')
-                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div>
+                    <label for="subject" class="block text-xs font-black text-[#0f1729] dark:text-slate-200 uppercase tracking-wider mb-2">Email Subject</label>
+                    <input type="text" name="subject" id="subject" value="{{ old('subject') }}" required class="w-full rounded-xl border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-[#0f1729] dark:text-white p-3 focus:border-[#3c83f6] focus:ring-[#3c83f6] font-bold" placeholder="e.g. Weekly Digest: Top Stories You Missed">
+                    @error('subject')
+                        <p class="mt-1 text-xs text-rose-600 font-bold uppercase tracking-tight">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div>
-                        <label for="content" class="block text-sm font-black text-zinc-700 dark:text-zinc-300 uppercase tracking-widest mb-2">Message Content</label>
-                        <div class="prose prose-lg dark:prose-invert max-w-none">
-                            <input id="content" type="hidden" name="content" value="{{ old('content') }}">
-                            <trix-editor input="content" class="bg-white dark:bg-zinc-950 dark:text-white border-zinc-300 dark:border-zinc-700 rounded-xl" placeholder="Write your newsletter here..."></trix-editor>
-                        </div>
-                        @error('content')
-                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
-                        @enderror
+                <div>
+                    <label for="content" class="block text-xs font-black text-[#0f1729] dark:text-slate-200 uppercase tracking-wider mb-2">Message Body</label>
+                    <div class="prose prose-sm dark:prose-invert max-w-none">
+                        <input id="content" type="hidden" name="content" value="{{ old('content') }}">
+                        <trix-editor input="content" class="bg-white dark:bg-slate-900 text-sm dark:text-white border-slate-200 dark:border-slate-800 rounded-xl p-3" placeholder="Write your newsletter update here..."></trix-editor>
                     </div>
+                    @error('content')
+                        <p class="mt-1 text-xs text-rose-600 font-bold uppercase tracking-tight">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="pt-4 flex items-center justify-between border-t border-zinc-100 dark:border-zinc-800">
-                        <p class="text-xs text-zinc-500 italic">
-                            This will be sent to all active subscribers via the system queue.
-                        <div class="flex justify-end pt-4">
-                            <x-form.button size="lg">
-                                Send Broadcast
-                            </x-form.button>
-                        </div>
+                <div class="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-800">
+                    <p class="text-xs text-slate-400 font-medium italic">
+                        This email broadcast will be dispatched to all active subscribers via background queues.
+                    </p>
+                    <button type="submit" class="px-6 py-2.5 bg-[#16a249] hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-emerald-600/20">
+                        Send Broadcast
+                    </button>
                 </div>
             </form>
         </div>
@@ -60,4 +57,6 @@
     @push('scripts')
         <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
     @endpush
-</x-layout>
+
+</x-admin-layout>
+

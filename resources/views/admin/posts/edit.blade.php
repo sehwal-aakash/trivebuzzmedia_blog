@@ -1,19 +1,19 @@
-<x-layout>
-    <x-slot:title>
-        Admin: Edit Post - {{ config('app.name', 'TriveBuzz Media') }}
-    </x-slot>
+<x-admin-layout title="Edit Post">
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="mb-10">
-            <a href="{{ route('admin.posts.index') }}" class="text-xs font-black uppercase tracking-widest text-surface-500 hover:text-brand transition-colors">
+    <div class="max-w-4xl">
+        <div class="mb-6 flex items-center justify-between">
+            <a href="{{ route('admin.posts.index') }}" class="text-xs font-bold text-[#3c83f6] hover:underline flex items-center gap-1.5">
                 &larr; Back to all posts
             </a>
-            <h1 class="text-4xl font-black text-surface-900 dark:text-white mt-4 uppercase tracking-tighter">Edit Post (Admin)</h1>
-            <p class="text-sm font-bold text-surface-500 mt-2 italic">Author: <span class="text-brand">{{ $post->author->name }}</span></p>
         </div>
 
-        <div class="bg-white dark:bg-surface-900 shadow-2xl sm:rounded-[2rem] border border-surface-100 dark:border-surface-800 p-8 md:p-12">
-            <form action="{{ route('admin.posts.update', $post) }}" method="POST" class="space-y-8">
+        <div class="bg-white dark:bg-[#0f1729] rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm overflow-hidden p-6 md:p-10">
+            <div class="mb-6 pb-6 border-b border-slate-100 dark:border-slate-800">
+                <h2 class="text-base font-black text-[#0f1729] dark:text-white uppercase tracking-wider">Edit Story (Admin Mode)</h2>
+                <p class="text-xs font-medium text-slate-400 mt-1">Author: <span class="font-extrabold text-[#3c83f6]">{{ $post->author->name }}</span></p>
+            </div>
+
+            <form action="{{ route('admin.posts.update', $post) }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')
 
@@ -30,7 +30,7 @@
                     <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <x-form.label for="category_id" value="Category" />
                         <x-form.select
@@ -49,7 +49,7 @@
                     </div>
 
                     <div>
-                        <x-form.label for="status" value="Status" />
+                        <x-form.label for="status" value="Publication Status" />
                         <x-form.select
                             name="status"
                             id="status"
@@ -81,22 +81,24 @@
                     <x-form.textarea
                         name="content"
                         id="content"
-                        rows="15"
+                        rows="12"
                         required
                         placeholder="Write your post content here..."
                     >{{ old('content', $post->content) }}</x-form.textarea>
                     <x-input-error :messages="$errors->get('content')" class="mt-2" />
                 </div>
 
-                <div class="flex items-center justify-end gap-8 pt-10 border-t border-surface-100 dark:border-surface-800">
-                    <a href="{{ route('admin.posts.index') }}" class="text-xs font-black uppercase tracking-widest text-surface-400 hover:text-surface-600 transition-colors">
-                        Discard Changes
+                <div class="flex items-center justify-end gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <a href="{{ route('admin.posts.index') }}" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                        Cancel
                     </a>
-                    <x-form.button size="lg">
-                        Save Changes
-                    </x-form.button>
+                    <button type="submit" class="px-6 py-2.5 bg-[#3c83f6] hover:bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-blue-500/20">
+                        Save Post Changes
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</x-layout>
+
+</x-admin-layout>
+

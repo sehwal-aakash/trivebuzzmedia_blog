@@ -9,11 +9,13 @@ class AIContentService
 {
     protected string $apiKey;
 
-    protected string $baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+    protected string $baseUrl;
 
     public function __construct()
     {
         $this->apiKey = config('services.gemini.key', '');
+        $model = config('services.gemini.model', 'gemini-1.5-flash');
+        $this->baseUrl = "https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent";
     }
 
     public function generateOutline(string $topic): ?string

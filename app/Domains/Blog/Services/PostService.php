@@ -42,7 +42,7 @@ class PostService
     public function updatePost(Post $post, array $data): Post
     {
         if (isset($data['title']) && $data['title'] !== $post->title) {
-            $data['slug'] = $this->generateUniqueSlug($data['title']);
+            $data['slug'] = $this->generateUniqueSlug($data['title'], $post->id);
         }
 
         if (isset($data['featured_image']) && $data['featured_image'] instanceof UploadedFile) {
@@ -102,11 +102,17 @@ class PostService
         }
     }
 
-    protected function generateUniqueSlug(string $title): string
+    protected function generateUniqueSlug(string $title, ?int $ignoreId = null): string
     {
         $slug = Str::slug($title);
-        $count = Post::where('slug', 'like', "{$slug}%")->count();
+        $originalSlug = $slug;
+        $count = 1;
 
-        return $count ? "{$slug}-{$count}" : $slug;
+        while (Post::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = "{$originalSlug}-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 }

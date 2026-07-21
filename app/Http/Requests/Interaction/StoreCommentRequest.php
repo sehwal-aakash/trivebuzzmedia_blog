@@ -13,11 +13,13 @@ class StoreCommentRequest extends FormRequest
 
     public function rules(): array
     {
+        $isGuest = ! auth()->check();
+
         return [
             'post_id' => ['required', 'exists:posts,id'],
             'content' => ['required', 'string', 'max:1000'],
-            'guest_name' => ['nullable', 'required_without:user_id', 'string', 'max:255'],
-            'guest_email' => ['nullable', 'required_without:user_id', 'email', 'max:255'],
+            'guest_name' => [$isGuest ? 'required' : 'nullable', 'string', 'max:255'],
+            'guest_email' => [$isGuest ? 'required' : 'nullable', 'email', 'max:255'],
             'parent_id' => ['nullable', 'exists:comments,id'],
         ];
     }
