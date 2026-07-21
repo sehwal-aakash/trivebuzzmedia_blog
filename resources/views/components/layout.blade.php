@@ -35,8 +35,11 @@
         @if(isset($meta)) {{ $meta }} @endif
 
         <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700" rel="stylesheet" />
 
         <!-- Styles / Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -50,14 +53,14 @@
         @stack('styles')
     </head>
     <body 
-        class="bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-100 font-sans antialiased min-h-screen flex flex-col"
+        class="bg-surface-50 dark:bg-global-primary text-global-text dark:text-slate-200 font-sans antialiased min-h-screen flex flex-col selection:bg-secondary selection:text-white"
         x-data="{ readingProgress: 0 }"
         @scroll.window="readingProgress = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100"
     >
         {{-- Reading Progress Bar --}}
         @if(Request::is('posts/*'))
             <div class="fixed top-0 left-0 w-full h-1 z-[100] pointer-events-none">
-                <div class="h-full bg-brand transition-all duration-150 ease-out" :style="`width: ${readingProgress}%`"></div>
+                <div class="h-full bg-secondary transition-all duration-150 ease-out" :style="`width: ${readingProgress}%`"></div>
             </div>
         @endif
         <x-nav />

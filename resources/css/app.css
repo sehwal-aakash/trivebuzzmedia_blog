@@ -5,15 +5,31 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+:root {
+    --e-global-color-primary: #0f1729;
+    --e-global-color-secondary: #3c83f6;
+    --e-global-color-text: #344256;
+    --e-global-color-accent: #16a249;
+    --e-global-color-f0334c8: #F8FAFC99;
+}
 
-    /* Custom Agency Palette */
-    --color-brand: #6366f1; /* Indigo 500 */
-    --color-brand-dark: #4f46e5; /* Indigo 600 */
-    --color-brand-light: #818cf8; /* Indigo 400 */
-    
+@theme {
+    --font-sans: 'Plus Jakarta Sans', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+    /* Global Brand Color Tokens */
+    --color-primary: #0f1729;
+    --color-secondary: #3c83f6;
+    --color-text-main: #344256;
+    --color-accent: #16a249;
+    --color-surface-soft: rgba(248, 250, 252, 0.6);
+
+    /* Tailwind Brand Utilities */
+    --color-brand: #3c83f6;
+    --color-brand-dark: #0f1729;
+    --color-brand-light: #60a5fa;
+    --color-brand-accent: #16a249;
+
+    /* Enhanced Surface Scale */
     --color-surface-50: #f8fafc;
     --color-surface-100: #f1f5f9;
     --color-surface-200: #e2e8f0;
@@ -21,8 +37,66 @@
     --color-surface-400: #94a3b8;
     --color-surface-500: #64748b;
     --color-surface-600: #475569;
-    --color-surface-700: #334155;
+    --color-surface-700: #344256;
     --color-surface-800: #1e293b;
-    --color-surface-900: #0f172a;
-    --color-surface-950: #020617;
+    --color-surface-900: #131c31;
+    --color-surface-950: #0f1729;
 }
+
+/* Base custom enhancements */
+body {
+    color: var(--e-global-color-text);
+    background-color: var(--color-surface-50);
+}
+
+.dark body {
+    color: #cbd5e1;
+    background-color: var(--e-global-color-primary);
+}
+
+.bg-global-primary {
+    background-color: var(--e-global-color-primary);
+}
+
+.bg-global-secondary {
+    background-color: var(--e-global-color-secondary);
+}
+
+.text-global-primary {
+    color: var(--e-global-color-primary);
+}
+
+.text-global-secondary {
+    color: var(--e-global-color-secondary);
+}
+
+.text-global-text {
+    color: var(--e-global-color-text);
+}
+
+.bg-global-accent {
+    background-color: var(--e-global-color-accent);
+}
+
+.text-global-accent {
+    color: var(--e-global-color-accent);
+}
+
+.bg-global-soft {
+    background-color: var(--e-global-color-f0334c8);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.dark .glass-card {
+    background: rgba(15, 23, 41, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
