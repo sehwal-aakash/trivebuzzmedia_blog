@@ -1,0 +1,93 @@
+name: CI/CD Deployment Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    name: Run Tests & Build Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: dom, curl, libxml, mbstring, zip, pdo, sqlite, pdo_sqlite, bcmath, intl, gd, exif
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Copy .env.example
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Generate App Key
+        run: php artisan key:generate
+
+      - name: Install NPM Dependencies
+        run: npm ci || npm install
+
+      - name: Build Frontend Assets
+        run: npm run build
+
+      - name: Run Tests
+        run: php artisan test --compact
+
+  deploy:
+    name: Deploy to Server via SSH
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            echo "🚀 Starting Deployment on Server..."
+            cd ${{ secrets.TARGET_DIR }}
+
+            echo "📥 Pulling latest code from GitHub..."
+            git fetch origin
+            git reset --hard origin/${{ github.ref_name }}
+
+            echo "📦 Installing PHP Dependencies..."
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+            echo "⚡ Building Frontend Assets..."
+            npm install
+            npm run build
+
+            echo "🗄️ Running Database Migrations..."
+            php artisan migrate --force
+
+            echo "🧹 Caching Configuration, Routes, and Views..."
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan event:cache
+
+            echo "🔄 Restarting Queue Workers..."
+            php artisan queue:restart || true
+
+            echo "🔒 Ensuring Storage Permissions..."
+            chmod -R 775 storage bootstrap/cache
+
+            echo "✅ Deployment Completed Successfully!"
