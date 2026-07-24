@@ -25,7 +25,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no vedeshra.in@ssh.gb.stackcp.com << 'EOF'
             cd public_html/trivebuzzmedia_blog
             git pull origin master --force
-            php84 /usr/bin/composer install  --ignore-platform-req=ext-mongodb
+            php84 /usr/bin/composer update --with-all-dependencies --ignore-platform-req=ext-mongodb
             php artisan migrate --force
             php artisan config:cache
             # php artisan route:cache
