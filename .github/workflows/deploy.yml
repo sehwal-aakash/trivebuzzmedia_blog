@@ -3,6 +3,7 @@ name: 🚀 Deploy TriveBuzzMedia to Server
 on:
   push:
     branches:
+      - master
       - main
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no vedeshra.in@ssh.gb.stackcp.com << 'EOF'
             cd public_html/trivebuzzmedia_blog
-            git pull origin main --force
+            git pull origin master --force
             php84 /usr/bin/composer install  --ignore-platform-req=ext-mongodb
             php artisan migrate --force
             php artisan config:cache
@@ -33,4 +34,5 @@ jobs:
             # chmod -R 775 storage bootstrap/cache
             # chown -R www-data:www-data .
           EOF
+
 
