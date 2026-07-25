@@ -5,6 +5,7 @@ use App\Domains\Interaction\Services\CommentService;
 use App\Domains\User\Services\AuthorApplicationService;
 use App\Enums\PostStatus;
 use App\Enums\UserRole;
+use App\Mail\BroadcastNewsletter;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -13,6 +14,7 @@ use App\Notifications\NewCommentNotification;
 use App\Notifications\PostPublishedNotification;
 use App\Notifications\WelcomeUserNotification;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 
 uses(LazilyRefreshDatabase::class);
@@ -89,4 +91,33 @@ test('author is notified when a new comment is posted on their article', functio
     ]);
 
     Notification::assertSentTo($author, NewCommentNotification::class);
+});
+
+test('outgoing emails are automatically logged in email_logs table', function () {
+    $user = User::factory()->create(['email' => 'recipient@example.com']);
+
+    // Send mail synchronously so MessageSent listener triggers
+    Mail::to($user->email)->sendNow(new BroadcastNewsletter('Subject Test', 'Email Body Test Content'));
+
+    $this->assertDatabaseHas('email_logs', [
+        'recipient' => 'recipient@example.com',
+        'subject' => 'Subject Test',
+        'status' => 'sent',
+    ]);
+});
+
+test('only super admin can access email logs dashboard', function () {
+    $admin = User::factory()->create(['role' => UserRole::ADMIN]);
+    $superAdmin = User::factory()->create(['role' => UserRole::SUPER_ADMIN]);
+
+    // Regular admin is forbidden
+    $this->actingAs($admin)
+        ->get(route('admin.email-logs.index'))
+        ->assertStatus(403);
+
+    // Super admin can view email logs dashboard
+    $this->actingAs($superAdmin)
+        ->get(route('admin.email-logs.index'))
+        ->assertStatus(200)
+        ->assertSee('Email Sent Monitor');
 });

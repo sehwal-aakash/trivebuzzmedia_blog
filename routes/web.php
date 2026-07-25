@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AuthorApplicationController as AdminApplicationController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmailLogController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
@@ -135,6 +136,13 @@ Route::middleware('auth')->group(function () {
 
             // Activity Logs
             Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+
+            // Email Tracking Logs (Super Admin Only)
+            Route::middleware(['role:super_admin'])->group(function () {
+                Route::get('/email-logs', [EmailLogController::class, 'index'])->name('email-logs.index');
+                Route::delete('/email-logs/{emailLog}', [EmailLogController::class, 'destroy'])->name('email-logs.destroy');
+                Route::delete('/email-logs-purge', [EmailLogController::class, 'purge'])->name('email-logs.purge');
+            });
 
             Route::get('/applications', [AdminApplicationController::class, 'index'])->name('applications.index');
             Route::get('/applications/{author_application}', [AdminApplicationController::class, 'show'])->name('applications.show');
