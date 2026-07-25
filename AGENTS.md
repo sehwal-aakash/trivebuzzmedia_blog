@@ -154,3 +154,27 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Do NOT delete tests without approval.
 
 </laravel-boost-guidelines>
+
+# Mandatory Git Branching & Merge Workflow Rules
+
+The remote repository has 3 primary branches: `master`, `dev`, and `test`.
+
+For EVERY task (bug fix, change, or new feature):
+1. **Always create a new sub-branch off of `master`**:
+   - `git checkout master && git pull origin master`
+   - `git checkout -b <task-name>-<type>`
+2. **Branch Suffix Naming Convention**:
+   - Bug Fixes: `<name>-fix` (e.g., `email-log-routing-fix`)
+   - Changes / Refactor: `<name>-change` (e.g., `deploy-config-change`)
+   - New Features: `<name>-feature` (e.g., `email-monitoring-feature`)
+3. **Development & Verification**:
+   - Work on the created sub-branch.
+   - Run formatting (`vendor/bin/pint --dirty --format agent`) and tests (`php artisan test --compact`).
+4. **Merge & Push**:
+   - Merge the sub-branch into `test`, `dev`, and `master`:
+     - `git checkout test && git merge <sub-branch>`
+     - `git checkout dev && git merge <sub-branch>`
+     - `git checkout master && git merge <sub-branch>`
+   - Push all three branches to remote:
+     - `git push origin test dev master`
+
