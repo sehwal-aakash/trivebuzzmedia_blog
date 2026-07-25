@@ -4,7 +4,11 @@ namespace App\Domains\Blog\Services;
 
 use App\Domains\Blog\Repositories\PostRepository;
 use App\Enums\PostStatus;
+use App\Enums\UserRole;
 use App\Models\Post;
+use App\Models\User;
+use App\Notifications\PostPublishedNotification;
+use App\Notifications\PostSubmittedForReviewNotification;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -36,11 +40,15 @@ class PostService
             $post->tags()->sync($data['tags']);
         }
 
+        $this->sendPostNotifications($post, null);
+
         return $post;
     }
 
     public function updatePost(Post $post, array $data): Post
     {
+        $oldStatus = $post->status;
+
         if (isset($data['title']) && $data['title'] !== $post->title) {
             $data['slug'] = $this->generateUniqueSlug($data['title'], $post->id);
         }
@@ -71,7 +79,23 @@ class PostService
             $post->tags()->sync($data['tags']);
         }
 
-        return $post->fresh();
+        $updatedPost = $post->fresh();
+        $this->sendPostNotifications($updatedPost, $oldStatus);
+
+        return $updatedPost;
+    }
+
+    protected function sendPostNotifications(Post $post, ?PostStatus $oldStatus = null): void
+    {
+        if ($post->status === PostStatus::PUBLISHED && ($oldStatus === null || $oldStatus !== PostStatus::PUBLISHED)) {
+            if ($post->author) {
+                $post->author->notify(new PostPublishedNotification($post));
+            }
+        } elseif ($post->status === PostStatus::PENDING_REVIEW && ($oldStatus === null || $oldStatus !== PostStatus::PENDING_REVIEW)) {
+            User::whereIn('role', [UserRole::ADMIN, UserRole::SUPER_ADMIN, UserRole::EDITOR])
+                ->get()
+                ->each(fn (User $user) => $user->notify(new PostSubmittedForReviewNotification($post)));
+        }
     }
 
     protected function handleSEO(Post $post, array $data): void

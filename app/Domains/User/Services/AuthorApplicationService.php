@@ -9,7 +9,7 @@ use App\Enums\UserRole;
 use App\Models\AuthorApplication;
 use App\Models\User;
 use App\Notifications\AuthorApplicationApproved;
-use App\Notifications\AuthorApplicationRejected;
+use App\Notifications\NewAuthorApplicationSubmittedNotification;
 
 class AuthorApplicationService
 {
@@ -20,12 +20,19 @@ class AuthorApplicationService
 
     public function submitApplication(User $user, array $data): AuthorApplication
     {
-        return $this->applicationRepository->create([
+        $application = $this->applicationRepository->create([
             'user_id' => $user->id,
             'bio' => $data['bio'],
             'portfolio_links' => $data['portfolio_links'] ?? [],
             'status' => AuthorApplicationStatus::PENDING,
         ]);
+
+        // Notify Admins
+        User::whereIn('role', [UserRole::ADMIN, UserRole::SUPER_ADMIN])
+            ->get()
+            ->each(fn (User $admin) => $admin->notify(new NewAuthorApplicationSubmittedNotification($application)));
+
+        return $application;
     }
 
     public function approveApplication(AuthorApplication $application): bool

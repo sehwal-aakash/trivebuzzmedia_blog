@@ -5,6 +5,7 @@ namespace App\Domains\Interaction\Services;
 use App\Domains\Interaction\Repositories\CommentRepository;
 use App\Enums\CommentStatus;
 use App\Models\Comment;
+use App\Notifications\NewCommentNotification;
 
 class CommentService
 {
@@ -22,7 +23,15 @@ class CommentService
             $data['status'] = CommentStatus::PENDING;
         }
 
-        return $this->repository->create($data);
+        $comment = $this->repository->create($data);
+
+        // Notify post author
+        $post = $comment->post;
+        if ($post && $post->author && ($post->author_id !== ($data['user_id'] ?? null))) {
+            $post->author->notify(new NewCommentNotification($comment));
+        }
+
+        return $comment;
     }
 
     public function approveComment(Comment $comment): bool
