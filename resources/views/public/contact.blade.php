@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :seoTags="$seoTags ?? []">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 class="text-4xl font-extrabold text-zinc-900 dark:text-white mb-8">Contact Us</h1>
         <div class="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800">

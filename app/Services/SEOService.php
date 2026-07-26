@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
@@ -11,9 +14,27 @@ class SEOService
     {
         $seo = $model?->seoMeta;
 
-        $title = $seo?->title ?? $model?->title ?? $model?->name ?? $defaults['title'] ?? config('app.name');
-        $description = $seo?->description ?? $model?->excerpt ?? $model?->description ?? $defaults['description'] ?? '';
-        $keywords = $seo?->keywords ?? $defaults['keywords'] ?? '';
+        // Custom model specific SEO overrides
+        $title = $defaults['title']
+            ?? $seo?->title
+            ?? $model?->meta_title
+            ?? $model?->title
+            ?? $model?->name
+            ?? config('app.name', 'TriveBuzz Media');
+
+        $description = $defaults['description']
+            ?? $seo?->description
+            ?? $model?->meta_description
+            ?? $model?->excerpt
+            ?? $model?->description
+            ?? 'Discover breaking news, tech insights, lifestyle articles, and expert stories on TriveBuzz Media.';
+
+        $keywords = $defaults['keywords']
+            ?? $seo?->keywords
+            ?? $model?->meta_keywords
+            ?? 'trivebuzz, blog, news, articles, publishing, stories';
+
+        $robots = $defaults['robots'] ?? $seo?->robots ?? 'index, follow';
 
         $ogTitle = $seo?->og_title ?? $title;
         $ogDescription = $seo?->og_description ?? $description;
@@ -23,23 +44,33 @@ class SEOService
             $ogImage = asset('storage/'.$ogImage);
         }
 
+        $schemaType = 'WebPage';
+        if ($model instanceof Post) {
+            $schemaType = 'BlogPosting';
+        } elseif ($model instanceof Category || $model instanceof Tag) {
+            $schemaType = 'CollectionPage';
+        }
+
         $schema = [
             '@context' => 'https://schema.org',
-            '@type' => $model ? 'BlogPosting' : 'WebSite',
+            '@type' => $schemaType,
             'headline' => $title,
             'description' => $description,
             'image' => $ogImage ?: asset('images/default-og.jpg'),
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => config('app.name'),
+                'name' => config('app.name', 'TriveBuzz Media'),
+                'url' => config('app.url'),
             ],
             'datePublished' => $model?->published_at?->toIso8601String() ?? $model?->created_at?->toIso8601String(),
+            'dateModified' => $model?->updated_at?->toIso8601String() ?? now()->toIso8601String(),
         ];
 
         return [
             'title' => $title,
             'description' => $description,
             'keywords' => $keywords,
+            'robots' => $robots,
             'og_title' => $ogTitle,
             'og_description' => $ogDescription,
             'og_image' => $ogImage,

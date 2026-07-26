@@ -10,8 +10,9 @@
         <title>{{ $seoTags['title'] ?? $title ?? config('app.name', 'TriveBuzz Media') }}</title>
 
         <!-- SEO -->
-        <meta name="description" content="{{ $seoTags['description'] ?? $description ?? 'Discover the latest stories, news, and insights from TriveBuzz Media.' }}">
-        <meta name="keywords" content="{{ $seoTags['keywords'] ?? '' }}">
+        <meta name="description" content="{{ $seoTags['description'] ?? $description ?? 'Discover breaking news, tech insights, lifestyle articles, and expert stories on TriveBuzz Media.' }}">
+        <meta name="keywords" content="{{ $seoTags['keywords'] ?? 'trivebuzz, blog, news, articles, publishing, stories' }}">
+        <meta name="robots" content="{{ $seoTags['robots'] ?? $robots ?? 'index, follow' }}">
         <link rel="canonical" href="{{ $seoTags['canonical_url'] ?? Request::url() }}">
 
         <!-- Open Graph / Facebook -->

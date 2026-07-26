@@ -21,15 +21,21 @@ class PostController extends Controller
 
         if ($query) {
             $posts = $this->postRepository->search($query);
+            $seoTags = $this->seoService->generateTags(null, [
+                'title' => 'Search: "'.$query.'" - TriveBuzz Media',
+                'description' => 'Search results for "'.$query.'" on TriveBuzz Media.',
+                'robots' => 'noindex, follow',
+            ]);
         } else {
             $posts = $this->postRepository->getPublishedPosts();
+            $seoTags = $this->seoService->generateTags(null, [
+                'title' => 'TriveBuzz Media - Multi-Author Blog & Publishing Platform',
+                'description' => 'Discover breaking news, tech insights, lifestyle articles, and expert stories from multi-author creators around the world.',
+                'robots' => 'index, follow',
+            ]);
         }
 
         $trendingPosts = $this->postRepository->getTrendingPosts();
-        $seoTags = $this->seoService->generateTags(null, [
-            'title' => 'TriveBuzz Media - Discover the latest stories',
-            'description' => 'TriveBuzz Media is a multi-author blog platform focused on news, insights, and stories from around the world.',
-        ]);
 
         return view('welcome', compact('posts', 'trendingPosts', 'query', 'seoTags'));
     }
@@ -44,7 +50,9 @@ class PostController extends Controller
 
         $this->postRepository->incrementViews($post);
         $relatedPosts = $this->postRepository->getRelatedPosts($post);
-        $seoTags = $this->seoService->generateTags($post);
+        $seoTags = $this->seoService->generateTags($post, [
+            'robots' => 'index, follow',
+        ]);
 
         return view('posts.show', compact('post', 'relatedPosts', 'seoTags'));
     }

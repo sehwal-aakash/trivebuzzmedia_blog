@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :seoTags="$seoTags ?? []">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 class="text-4xl font-extrabold text-zinc-900 dark:text-white mb-8">Terms of Service</h1>
         <div class="prose dark:prose-invert">
