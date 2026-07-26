@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -27,7 +28,16 @@ class BroadcastNewsletter extends Mailable
      */
     public function envelope(): Envelope
     {
+        $fromName = config('mail.from.name') && config('mail.from.name') !== 'Laravel'
+            ? config('mail.from.name')
+            : 'TriveBuzz Media';
+
+        $fromAddress = config('mail.from.address') && config('mail.from.address') !== 'hello@example.com'
+            ? config('mail.from.address')
+            : 'noreply@trivebuzzmedia.co.uk';
+
         return new Envelope(
+            from: new Address($fromAddress, $fromName),
             subject: $this->subjectStr,
         );
     }

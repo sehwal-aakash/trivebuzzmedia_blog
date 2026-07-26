@@ -1,8 +1,13 @@
+@php
+    $appName = config('app.name') && config('app.name') !== 'Laravel' ? config('app.name') : 'TriveBuzz Media';
+    $appUrl = config('app.url') && !str_contains(config('app.url'), 'localhost') ? config('app.url') : 'https://trivebuzzmedia.co.uk';
+@endphp
+
 <x-mail::layout>
 {{-- Header --}}
 <x-slot:header>
-<x-mail::header :url="config('app.url')">
-{{ config('app.name') }}
+<x-mail::header :url="$appUrl">
+{{ $appName }}
 </x-mail::header>
 </x-slot:header>
 
@@ -21,7 +26,7 @@
 {{-- Footer --}}
 <x-slot:footer>
 <x-mail::footer>
-© {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}
+© {{ date('Y') }} {{ $appName }}. {{ __('All rights reserved.') }}
 </x-mail::footer>
 </x-slot:footer>
 </x-mail::layout>
