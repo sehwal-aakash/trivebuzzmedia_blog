@@ -9,6 +9,11 @@
 
         <title>{{ $seoTags['title'] ?? $title ?? config('app.name', 'TriveBuzz Media') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/jpeg" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+        <link rel="shortcut icon" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+
         <!-- SEO -->
         <meta name="description" content="{{ $seoTags['description'] ?? $description ?? 'Discover breaking news, tech insights, lifestyle articles, and expert stories on TriveBuzz Media.' }}">
         <meta name="keywords" content="{{ $seoTags['keywords'] ?? 'trivebuzz, blog, news, articles, publishing, stories' }}">

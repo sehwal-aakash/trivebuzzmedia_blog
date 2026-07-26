@@ -38,9 +38,9 @@ class SEOService
 
         $ogTitle = $seo?->og_title ?? $title;
         $ogDescription = $seo?->og_description ?? $description;
-        $ogImage = $seo?->og_image ?? $model?->featured_image ?? $defaults['og_image'] ?? '';
+        $ogImage = $seo?->og_image ?? $model?->featured_image ?? $defaults['og_image'] ?? asset('trivebuzzmedia-logo.png');
 
-        if ($ogImage && ! str_starts_with($ogImage, 'http')) {
+        if ($ogImage && ! str_starts_with($ogImage, 'http') && ! str_contains($ogImage, 'trivebuzzmedia-logo.png')) {
             $ogImage = asset('storage/'.$ogImage);
         }
 

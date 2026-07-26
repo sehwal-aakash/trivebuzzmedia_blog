@@ -8,19 +8,7 @@
                 {{-- Logo --}}
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                        <div class="relative">
-                            <div class="w-10 h-10 bg-[#0f1729] dark:bg-slate-800 border border-slate-700/50 rounded-xl flex items-center justify-center text-white shadow-md shadow-blue-500/10 transform group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
-                                <span class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-[#3c83f6] to-[#16a249]">T</span>
-                            </div>
-                            <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16a249] opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-3 w-3 bg-[#16a249]"></span>
-                            </span>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-xl font-black tracking-tight text-[#0f1729] dark:text-white leading-none font-sans">TRIVEBUZZ</span>
-                            <span class="text-[10px] font-bold text-[#3c83f6] dark:text-[#60a5fa] tracking-[0.22em] leading-none uppercase mt-1">Media Group</span>
-                        </div>
+                        <img src="{{ asset('trivebuzzmedia-logo.png') }}" alt="TriveBuzz Media Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
                     </a>
                 </div>
 

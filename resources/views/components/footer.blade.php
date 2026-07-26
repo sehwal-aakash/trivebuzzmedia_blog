@@ -4,11 +4,8 @@
         {{-- Top Section: Newsletter & Branding --}}
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
             <div class="lg:col-span-4">
-                <a href="{{ route('home') }}" class="group flex items-center gap-3 mb-5">
-                    <div class="w-10 h-10 bg-[#0f1729] dark:bg-slate-800 border border-slate-700/50 rounded-xl flex items-center justify-center text-white shadow-md">
-                        <span class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-[#3c83f6] to-[#16a249]">T</span>
-                    </div>
-                    <span class="text-xl font-black tracking-tight text-[#0f1729] dark:text-white uppercase leading-none font-sans">TRIVEBUZZ</span>
+                <a href="{{ route('home') }}" class="group inline-flex items-center gap-3 mb-5">
+                    <img src="{{ asset('trivebuzzmedia-logo.png') }}" alt="TriveBuzz Media Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
                 </a>
                 <p class="text-[#344256] dark:text-slate-400 text-sm leading-relaxed mb-6 max-w-sm">
                     Empowering the next generation of storytellers with AI-assisted insights and a world-class publishing experience. Join the community today.

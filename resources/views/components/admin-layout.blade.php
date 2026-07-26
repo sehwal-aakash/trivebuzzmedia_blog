@@ -10,6 +10,11 @@
     <title>{{ $title }} - {{ config('app.name', 'TriveBuzz Media') }}</title>
     <meta name="robots" content="noindex, nofollow">
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+    <link rel="shortcut icon" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('trivebuzzmedia-favicon.jpg') }}">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -40,13 +45,7 @@
         {{-- Sidebar Brand --}}
         <div class="h-20 flex items-center px-6 border-b border-slate-800 justify-between">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                <div class="w-9 h-9 bg-slate-800 border border-slate-700/60 rounded-xl flex items-center justify-center text-white shadow-md">
-                    <span class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-tr from-[#3c83f6] to-[#16a249]">T</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-lg font-black tracking-tight leading-none text-white font-sans">TRIVEBUZZ</span>
-                    <span class="text-[9px] font-extrabold text-[#3c83f6] tracking-[0.2em] uppercase mt-1">Admin Panel</span>
-                </div>
+                <img src="{{ asset('trivebuzzmedia-logo.png') }}" alt="TriveBuzz Media Admin Logo" class="h-9 w-auto object-contain transition-transform group-hover:scale-105">
             </a>
             <button @click="sidebarOpen = false" class="lg:hidden p-1 text-slate-400 hover:text-white">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
