@@ -188,7 +188,7 @@
             <div @click.away="showModal = false" class="bg-white dark:bg-[#151f32] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 max-w-xl w-full space-y-4 shadow-2xl">
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                     <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Email Log Details</h3>
-                    <button @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                    <button type="button" @click="showModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-white">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
@@ -221,7 +221,7 @@
                 </template>
 
                 <div class="flex justify-end pt-2 border-t border-slate-200 dark:border-slate-800">
-                    <button @click="showModal = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 transition-all">
+                    <button type="button" @click="showModal = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 transition-all cursor-pointer">
                         Close
                     </button>
                 </div>
@@ -234,13 +234,13 @@
                 <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Purge All Email Logs?</h3>
                 <p class="text-xs text-slate-500 dark:text-slate-400">This action will permanently delete all recorded email delivery logs. This action cannot be undone.</p>
                 <div class="flex justify-end gap-2 pt-2">
-                    <button @click="showPurgeModal = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 transition-all">
+                    <button type="button" @click="showPurgeModal = false" class="px-4 py-2 bg-slate-100 dark:bg-slate-800 font-bold text-xs text-slate-700 dark:text-slate-300 rounded-xl hover:bg-slate-200 transition-all cursor-pointer">
                         Cancel
                     </button>
                     <form method="POST" action="{{ route('admin.email-logs.purge') }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                        <button type="submit" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer">
                             Confirm Purge
                         </button>
                     </form>

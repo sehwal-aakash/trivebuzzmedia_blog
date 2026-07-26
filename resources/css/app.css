@@ -100,3 +100,7 @@ body {
     border: 1px solid rgba(30, 41, 59, 0.8);
 }
 
+[x-cloak] {
+    display: none !important;
+}
+
