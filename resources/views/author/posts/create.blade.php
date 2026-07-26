@@ -90,42 +90,49 @@
                 
                 {{-- Left Column: Writing Canvas --}}
                 <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white dark:bg-[#151f32] border border-surface-200/80 dark:border-surface-800/80 rounded-3xl p-6 md:p-10 shadow-xs space-y-6">
+                    <div class="bg-white dark:bg-[#151f32] border border-surface-200/80 dark:border-surface-800/80 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
                         
                         {{-- Title Field --}}
-                        <div>
-                            <textarea 
-                                name="title" 
-                                rows="1" 
-                                required
-                                class="w-full text-3xl md:text-4xl lg:text-5xl font-black border-none bg-transparent focus:ring-0 p-0 text-surface-900 dark:text-white placeholder-surface-300 dark:placeholder-surface-700 resize-none tracking-tight leading-tight"
-                                placeholder="Article Title..."
-                                oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
-                            >{{ old('title') }}</textarea>
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Article Title</label>
+                            <div class="px-5 py-4 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-2 focus-within:ring-brand/20 transition-all">
+                                <textarea 
+                                    name="title" 
+                                    rows="1" 
+                                    required
+                                    class="w-full text-2xl md:text-3xl lg:text-4xl font-black border-none bg-transparent focus:ring-0 p-0 text-surface-900 dark:text-white placeholder-surface-300 dark:placeholder-surface-600 resize-none tracking-tight leading-snug"
+                                    placeholder="Enter article title..."
+                                    oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
+                                >{{ old('title') }}</textarea>
+                            </div>
                             @error('title')
                                 <p class="mt-1 text-xs font-bold text-rose-500">{{ $message }}</p>
                             @enderror
                         </div>
                         
                         {{-- Subtitle / Excerpt Field --}}
-                        <div>
-                            <textarea 
-                                name="excerpt" 
-                                rows="2" 
-                                class="w-full text-lg md:text-xl font-medium border-none bg-transparent focus:ring-0 p-0 text-surface-500 dark:text-surface-400 placeholder-surface-300 dark:placeholder-surface-700 resize-none leading-relaxed"
-                                placeholder="Write a short subhead or summary that captures reader attention..."
-                            >{{ old('excerpt') }}</textarea>
+                        <div class="space-y-2">
+                            <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Summary / Subhead</label>
+                            <div class="px-5 py-3.5 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-2 focus-within:ring-brand/20 transition-all">
+                                <textarea 
+                                    name="excerpt" 
+                                    rows="2" 
+                                    class="w-full text-base md:text-lg font-medium border-none bg-transparent focus:ring-0 p-0 text-surface-700 dark:text-surface-300 placeholder-surface-300 dark:placeholder-surface-600 resize-none leading-relaxed"
+                                    placeholder="Write a short subhead or summary that captures reader attention..."
+                                >{{ old('excerpt') }}</textarea>
+                            </div>
                             @error('excerpt')
                                 <p class="mt-1 text-xs font-bold text-rose-500">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <hr class="border-surface-100 dark:border-surface-800/80">
-
                         {{-- Main Rich Editor --}}
-                        <div class="prose prose-lg dark:prose-invert max-w-none min-h-[450px]">
-                            <input id="content" type="hidden" name="content" value="{{ old('content') }}">
-                            <trix-editor input="content" placeholder="Tell your story... Write insights, format headings, or add quotes."></trix-editor>
+                        <div class="space-y-2 pt-2">
+                            <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Story Body</label>
+                            <div class="p-4 md:p-6 bg-surface-50/40 dark:bg-slate-900/40 border border-surface-200/80 dark:border-surface-800 rounded-2xl prose prose-lg dark:prose-invert max-w-none min-h-[450px]">
+                                <input id="content" type="hidden" name="content" value="{{ old('content') }}">
+                                <trix-editor input="content" placeholder="Tell your story... Write insights, format headings, or add quotes."></trix-editor>
+                            </div>
                             @error('content')
                                 <p class="mt-2 text-xs font-bold text-rose-500">{{ $message }}</p>
                             @enderror
