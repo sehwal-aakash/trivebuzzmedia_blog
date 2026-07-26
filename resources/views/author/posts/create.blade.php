@@ -6,6 +6,7 @@
     {{-- Head for Trix --}}
     @push('styles')
         <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+        <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
         <style>
             trix-editor { min-height: 400px !important; }
             .trix-button-group--file-tools { display: none !important; }
