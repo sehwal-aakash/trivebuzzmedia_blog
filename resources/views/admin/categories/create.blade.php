@@ -1,6 +1,6 @@
 <x-admin-layout title="Add New Category">
 
-    <div class="max-w-5xl space-y-6" x-data="{ 
+    <div class="space-y-6" x-data="{ 
         name: '{{ old('name', '') }}',
         color: '{{ old('color', '#3c83f6') }}',
         icon: '{{ old('icon', '📂') }}',

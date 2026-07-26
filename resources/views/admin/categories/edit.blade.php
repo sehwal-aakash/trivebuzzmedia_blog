@@ -1,6 +1,6 @@
 <x-admin-layout title="Edit Category">
 
-    <div class="max-w-5xl space-y-6" x-data="{ 
+    <div class="space-y-6" x-data="{ 
         name: '{{ old('name', $category->name) }}',
         color: '{{ old('color', $category->color ?? '#3c83f6') }}',
         icon: '{{ old('icon', $category->icon ?? '📂') }}',
