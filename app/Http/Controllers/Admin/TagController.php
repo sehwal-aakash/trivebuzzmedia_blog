@@ -37,6 +37,8 @@ class TagController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
+        $data['is_trending'] = $request->boolean('is_trending');
+        $data['color'] = $data['color'] ?? '#3c83f6';
 
         Tag::create($data);
 
@@ -58,6 +60,7 @@ class TagController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
+        $data['is_trending'] = $request->boolean('is_trending');
 
         $tag->update($data);
 
