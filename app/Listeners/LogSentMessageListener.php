@@ -8,6 +8,8 @@ use Symfony\Component\Mime\Address;
 
 class LogSentMessageListener
 {
+    protected static array $loggedMessages = [];
+
     /**
      * Handle the mail sent event.
      */
@@ -27,8 +29,17 @@ class LogSentMessageListener
             $body = ! empty($textBody) ? $textBody : strip_tags($htmlBody ?? '');
             $snippet = str($body)->replace(["\r", "\n"], ' ')->squish()->limit(400);
 
+            $recipientsStr = $recipients ?: 'unknown@domain.com';
+            $dedupKey = md5($recipientsStr.'|'.$subject.'|'.(string) $snippet);
+
+            if (isset(static::$loggedMessages[$dedupKey])) {
+                return;
+            }
+
+            static::$loggedMessages[$dedupKey] = true;
+
             EmailLog::create([
-                'recipient' => $recipients ?: 'unknown@domain.com',
+                'recipient' => $recipientsStr,
                 'subject' => $subject,
                 'status' => 'sent',
                 'body_snippet' => (string) $snippet,
