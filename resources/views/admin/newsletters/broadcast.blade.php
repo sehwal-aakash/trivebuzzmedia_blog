@@ -46,88 +46,173 @@
         </style>
     @endpush
 
-    <div class="max-w-5xl space-y-6">
+    <div class="space-y-6" x-data="{ audience: '{{ old('audience', 'subscribers') }}' }">
         
         {{-- Header Bar --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <a href="{{ route('admin.newsletters.index') }}" class="text-xs font-bold text-[#3c83f6] hover:underline inline-flex items-center gap-1.5 mb-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    Back to Subscriber Audience
+                    Back to Subscribers List
                 </a>
-                <h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Compose Newsletter Broadcast</h1>
-                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Draft and send rich email updates to all active newsletter subscribers.</p>
-            </div>
-
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/10 text-[#16a249] rounded-xl border border-emerald-500/20 text-xs font-bold self-start sm:self-auto">
-                <span class="w-2 h-2 rounded-full bg-[#16a249] animate-pulse"></span>
-                <span>Active Audience Ready</span>
+                <h1 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Create & Send Broadcast</h1>
+                <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">Compose newsletters, select target audience, and dispatch email campaigns.</p>
             </div>
         </div>
 
-        {{-- Form Container --}}
-        <div class="bg-white dark:bg-[#151f32] border border-slate-200/80 dark:border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
-            <form action="{{ route('admin.newsletters.broadcast') }}" method="POST" class="space-y-6">
-                @csrf
+        @if(session('error'))
+            <div class="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-2xl text-xs font-bold text-rose-600 dark:text-rose-400">
+                {{ session('error') }}
+            </div>
+        @endif
 
-                {{-- Email Subject Field --}}
-                <div class="space-y-2">
-                    <label for="subject" class="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
-                        Email Subject Line
-                    </label>
-                    <div class="relative">
+        <form action="{{ route('admin.newsletters.store') }}" method="POST" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            @csrf
+
+            {{-- Left Main Content Canvas --}}
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="bg-white dark:bg-[#151f32] border border-slate-200/80 dark:border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-xs space-y-6">
+                    
+                    {{-- Subject Line --}}
+                    <div class="space-y-2">
+                        <label for="subject" class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+                            Broadcast Subject Line <span class="text-rose-500">*</span>
+                        </label>
                         <input 
                             type="text" 
                             name="subject" 
                             id="subject" 
-                            value="{{ old('subject') }}" 
+                            value="{{ old('subject') }}"
                             required 
-                            class="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#3c83f6] transition-all" 
-                            placeholder="e.g. Weekly Digest: Top Stories You Can't Miss This Week"
+                            placeholder="e.g. 🚀 Weekly Tech Roundup: Breakthoughs in AI & Web Development"
+                            class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#3c83f6] transition-all"
                         >
-                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        @error('subject')
+                            <p class="text-xs font-bold text-rose-500">{{ $message }}</p>
+                        @enderror
                     </div>
-                    @error('subject')
-                        <p class="text-xs font-bold text-rose-500">{{ $message }}</p>
-                    @enderror
+
+                    {{-- Rich Text Body Editor --}}
+                    <div class="space-y-2 pt-2">
+                        <label class="block text-xs font-extrabold text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+                            Email Body Content <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="p-4 bg-slate-50/50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl">
+                            <input id="content" type="hidden" name="content" value="{{ old('content') }}">
+                            <trix-editor input="content" placeholder="Compose your email message, add headings, links, or bullet points..."></trix-editor>
+                        </div>
+                        @error('content')
+                            <p class="mt-1 text-xs font-bold text-rose-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
                 </div>
 
-                {{-- Rich Message Body --}}
-                <div class="space-y-2">
-                    <label for="content" class="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">
-                        Broadcast Message Body
+            </div>
+
+            {{-- Right Sidebar Audience & Dispatch Controls --}}
+            <div class="lg:col-span-4 space-y-6">
+                
+                {{-- Target Audience Card --}}
+                <div class="bg-white dark:bg-[#151f32] border border-slate-200/80 dark:border-slate-800/80 rounded-3xl p-6 shadow-xs space-y-6">
+                    <h3 class="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white pb-3 border-b border-slate-100 dark:border-slate-800">
+                        Target Audience
+                    </h3>
+
+                    {{-- Audience Options --}}
+                    <div class="space-y-3">
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="audience" 
+                                value="subscribers" 
+                                x-model="audience"
+                                class="mt-0.5 w-4 h-4 text-[#3c83f6] focus:ring-[#3c83f6]/20 cursor-pointer"
+                            >
+                            <div>
+                                <span class="block text-xs font-extrabold text-slate-900 dark:text-white">Active Newsletter Subscribers</span>
+                                <span class="text-[10px] font-medium text-slate-400">Total: {{ number_format($activeSubscribersCount) }} confirmed subscribers</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="audience" 
+                                value="users" 
+                                x-model="audience"
+                                class="mt-0.5 w-4 h-4 text-[#3c83f6] focus:ring-[#3c83f6]/20 cursor-pointer"
+                            >
+                            <div>
+                                <span class="block text-xs font-extrabold text-slate-900 dark:text-white">All Platform Users & Authors</span>
+                                <span class="text-[10px] font-medium text-slate-400">Total: {{ number_format($usersCount) }} registered users</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 cursor-pointer">
+                            <input 
+                                type="radio" 
+                                name="audience" 
+                                value="custom" 
+                                x-model="audience"
+                                class="mt-0.5 w-4 h-4 text-[#3c83f6] focus:ring-[#3c83f6]/20 cursor-pointer"
+                            >
+                            <div>
+                                <span class="block text-xs font-extrabold text-slate-900 dark:text-white">Custom Email List / Test</span>
+                                <span class="text-[10px] font-medium text-slate-400">Send to specific test email addresses</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    {{-- Custom Emails Input --}}
+                    <div x-show="audience === 'custom'" class="space-y-1.5 pt-2" x-transition>
+                        <label for="custom_emails" class="block text-[11px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">
+                            Recipient Emails (Comma-separated)
+                        </label>
+                        <textarea 
+                            name="custom_emails" 
+                            id="custom_emails" 
+                            rows="3" 
+                            placeholder="admin@domain.com, test@domain.com"
+                            class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-mono text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#3c83f6] transition-all resize-none"
+                        >{{ old('custom_emails') }}</textarea>
+                    </div>
+
+                    {{-- Direct Send Checkbox --}}
+                    <label class="flex items-center justify-between p-3.5 bg-blue-50/60 dark:bg-blue-950/30 rounded-2xl border border-blue-200/60 dark:border-blue-900/40 cursor-pointer">
+                        <div>
+                            <span class="block text-xs font-extrabold text-[#3c83f6]">Send Immediately</span>
+                            <span class="text-[10px] font-medium text-slate-500 dark:text-slate-400">Bypass background queue & deliver directly</span>
+                        </div>
+                        <input 
+                            type="checkbox" 
+                            name="send_now" 
+                            value="1" 
+                            checked
+                            class="w-4 h-4 rounded text-[#3c83f6] focus:ring-[#3c83f6]/20 cursor-pointer"
+                        >
                     </label>
-                    <div class="bg-slate-50/50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 min-h-[420px]">
-                        <input id="content" type="hidden" name="content" value="{{ old('content') }}">
-                        <trix-editor input="content" placeholder="Compose your broadcast update... Write rich copy, add links, or include bullet points."></trix-editor>
+
+                    {{-- Action Buttons --}}
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
+                        <a href="{{ route('admin.newsletters.index') }}" class="w-1/3 px-4 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-600 dark:text-slate-300 font-bold text-xs rounded-xl text-center transition-all">
+                            Cancel
+                        </a>
+                        <button 
+                            type="submit" 
+                            class="w-2/3 px-5 py-3 bg-[#3c83f6] hover:bg-blue-600 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer"
+                            onclick="return confirm('Are you sure you want to send this newsletter broadcast to the selected audience?')"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                            <span>Send Broadcast</span>
+                        </button>
                     </div>
-                    @error('content')
-                        <p class="text-xs font-bold text-rose-500">{{ $message }}</p>
-                    @enderror
+
                 </div>
 
-                {{-- Action Bar & Confirmation Notice --}}
-                <div class="pt-6 border-t border-slate-200/80 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div class="flex items-center gap-2.5 text-slate-500 dark:text-slate-400 text-xs font-medium">
-                        <svg class="w-4 h-4 text-amber-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        <span>Broadcasts will be queued and sent to all active subscribers asynchronously.</span>
-                    </div>
-
-                    <button 
-                        type="submit" 
-                        class="px-8 py-3 bg-gradient-to-r from-[#16a249] to-emerald-600 hover:from-emerald-600 hover:to-[#16a249] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
-                        <span>Dispatch Broadcast</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-
+            </div>
+        </form>
     </div>
-
-    @push('scripts')
-        <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
-    @endpush
 
 </x-admin-layout>

@@ -3,14 +3,13 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BroadcastNewsletter extends Mailable implements ShouldQueue
+class BroadcastNewsletter extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +18,8 @@ class BroadcastNewsletter extends Mailable implements ShouldQueue
      */
     public function __construct(
         public string $subjectStr,
-        public string $bodyContent
+        public string $bodyContent,
+        public ?string $unsubscribeToken = null
     ) {}
 
     /**
@@ -40,7 +40,9 @@ class BroadcastNewsletter extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'emails.newsletter.broadcast',
             with: [
+                'subjectStr' => $this->subjectStr,
                 'content' => $this->bodyContent,
+                'unsubscribeToken' => $this->unsubscribeToken,
             ],
         );
     }

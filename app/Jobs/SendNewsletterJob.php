@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Mail\BroadcastNewsletter;
-use App\Models\Newsletter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -19,9 +18,10 @@ class SendNewsletterJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        public Newsletter $subscriber,
+        public string $email,
         public string $subject,
-        public string $content
+        public string $content,
+        public ?string $unsubscribeToken = null
     ) {}
 
     /**
@@ -29,6 +29,6 @@ class SendNewsletterJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::to($this->subscriber->email)->send(new BroadcastNewsletter($this->subject, $this->content));
+        Mail::to($this->email)->send(new BroadcastNewsletter($this->subject, $this->content, $this->unsubscribeToken));
     }
 }
