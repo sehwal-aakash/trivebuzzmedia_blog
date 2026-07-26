@@ -17,7 +17,22 @@ class Category extends Model
         'name',
         'slug',
         'description',
+        'color',
+        'icon',
+        'is_featured',
+        'sort_order',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_featured' => 'boolean',
+            'sort_order' => 'integer',
+        ];
+    }
 
     public function posts(): HasMany
     {

@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index(): View
     {
-        $categories = Category::withCount('posts')->latest()->paginate(15);
+        $categories = Category::withCount('posts')->orderBy('sort_order')->latest()->paginate(15);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -37,6 +37,8 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
+        $data['is_featured'] = $request->boolean('is_featured');
+        $data['color'] = $data['color'] ?? '#3c83f6';
 
         Category::create($data);
 
@@ -58,6 +60,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
+        $data['is_featured'] = $request->boolean('is_featured');
 
         $category->update($data);
 
