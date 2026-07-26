@@ -184,7 +184,7 @@
         </div>
 
         {{-- Log Detail Modal --}}
-        <div x-show="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs" x-cloak>
+        <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs" x-cloak>
             <div @click.away="showModal = false" class="bg-white dark:bg-[#151f32] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 max-w-xl w-full space-y-4 shadow-2xl">
                 <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
                     <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Email Log Details</h3>
@@ -229,7 +229,7 @@
         </div>
 
         {{-- Purge Modal --}}
-        <div x-show="showPurgeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs" x-cloak>
+        <div x-show="showPurgeModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs" x-cloak>
             <div @click.away="showPurgeModal = false" class="bg-white dark:bg-[#151f32] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
                 <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Purge All Email Logs?</h3>
                 <p class="text-xs text-slate-500 dark:text-slate-400">This action will permanently delete all recorded email delivery logs. This action cannot be undone.</p>
