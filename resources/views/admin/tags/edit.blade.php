@@ -56,7 +56,7 @@
                                 id="name" 
                                 x-model="name"
                                 required 
-                                placeholder="laravel, ai, webdev"
+                                placeholder="tech, ai, news"
                                 class="w-full pl-8 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#3c83f6] transition-all"
                             >
                         </div>
