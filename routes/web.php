@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
             // Newsletter Management
             Route::get('/newsletters', [App\Http\Controllers\Admin\NewsletterController::class, 'index'])->name('newsletters.index');
             Route::get('/newsletters/create', [App\Http\Controllers\Admin\NewsletterController::class, 'create'])->name('newsletters.create');
+            Route::post('/newsletters', [App\Http\Controllers\Admin\NewsletterController::class, 'store'])->name('newsletters.store');
             Route::post('/newsletters/broadcast', [App\Http\Controllers\Admin\NewsletterController::class, 'store'])->name('newsletters.broadcast');
             Route::delete('/newsletters/{newsletter}', [App\Http\Controllers\Admin\NewsletterController::class, 'destroy'])->name('newsletters.destroy');
 
