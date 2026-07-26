@@ -24,6 +24,7 @@
             document.documentElement.classList.remove('dark');
         }
     </script>
+    @stack('styles')
 </head>
 <body class="bg-surface-50 dark:bg-[#0f1729] text-[#344256] dark:text-slate-200 font-sans antialiased min-h-screen flex" x-data="{ sidebarOpen: false }">
 
