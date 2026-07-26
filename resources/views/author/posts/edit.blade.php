@@ -96,12 +96,12 @@
                         {{-- Title Field --}}
                         <div class="space-y-2">
                             <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Article Title</label>
-                            <div class="px-5 py-4 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-2 focus-within:ring-brand/20 transition-all">
+                            <div class="px-5 py-4 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
                                 <textarea 
                                     name="title" 
                                     rows="1" 
                                     required
-                                    class="w-full text-2xl md:text-3xl lg:text-4xl font-black border-none bg-transparent focus:ring-0 p-0 text-surface-900 dark:text-white placeholder-surface-300 dark:placeholder-surface-600 resize-none tracking-tight leading-snug"
+                                    class="w-full text-2xl md:text-3xl lg:text-4xl font-black border-none outline-none focus:outline-none focus:ring-0 p-0 text-surface-900 dark:text-white placeholder-surface-300 dark:placeholder-surface-600 resize-none tracking-tight leading-snug"
                                     placeholder="Enter article title..."
                                     oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"
                                 >{{ old('title', $post->title) }}</textarea>
@@ -114,11 +114,11 @@
                         {{-- Subtitle / Excerpt Field --}}
                         <div class="space-y-2">
                             <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Summary / Subhead</label>
-                            <div class="px-5 py-3.5 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 focus-within:ring-2 focus-within:ring-brand/20 transition-all">
+                            <div class="px-5 py-3.5 bg-surface-50/80 dark:bg-slate-900/60 border border-surface-200/80 dark:border-surface-800 rounded-2xl focus-within:border-brand focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
                                 <textarea 
                                     name="excerpt" 
                                     rows="2" 
-                                    class="w-full text-base md:text-lg font-medium border-none bg-transparent focus:ring-0 p-0 text-surface-700 dark:text-surface-300 placeholder-surface-300 dark:placeholder-surface-600 resize-none leading-relaxed"
+                                    class="w-full text-base md:text-lg font-medium border-none outline-none focus:outline-none focus:ring-0 p-0 text-surface-700 dark:text-surface-300 placeholder-surface-300 dark:placeholder-surface-600 resize-none leading-relaxed"
                                     placeholder="Write a short subhead or summary that captures reader attention..."
                                 >{{ old('excerpt', $post->excerpt) }}</textarea>
                             </div>
