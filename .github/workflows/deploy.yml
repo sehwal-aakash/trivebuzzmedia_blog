@@ -23,15 +23,16 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no vedeshra.in@ssh.gb.stackcp.com << 'EOF'
             cd public_html/trivebuzzmedia_blog
-            git pull origin master --force
-            php84 /usr/bin/composer install --ignore-platform-req=ext-mongodb
+            git checkout master
+            git fetch origin master
+            git reset --hard origin/master
+            php84 /usr/bin/composer install --ignore-platform-req=ext-mongodb --no-interaction --prefer-dist --optimize-autoloader
             php84 artisan migrate --force
             php84 artisan config:cache
-            # php84 artisan route:cache
+            php84 artisan route:clear
+            php84 artisan view:clear
             php84 artisan view:cache
             php84 artisan storage:link
-            # chmod -R 775 storage bootstrap/cache
-            # chown -R www-data:www-data .
           EOF
 
 
