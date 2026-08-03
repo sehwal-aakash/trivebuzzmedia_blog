@@ -79,8 +79,8 @@
 
                 <div class="space-y-6">
                     @forelse ($posts as $post)
-                        {{-- Skip the first post on page 1 if on home feed with no filter, as it's featured above --}}
-                        @if(!$query && !isset($activeCategory) && !isset($activeTag) && $posts->currentPage() == 1 && $loop->first)
+                        {{-- Skip the first post on page 1 if on home feed with no filter and total posts > 1, as it's featured above --}}
+                        @if(!$query && !isset($activeCategory) && !isset($activeTag) && $posts->total() > 1 && $posts->currentPage() == 1 && $loop->first)
                             @continue
                         @endif
                         <x-post-card :post="$post" />

@@ -13,7 +13,7 @@ class PostRepository
     {
         return Post::published()
             ->with(['author', 'category', 'tags'])
-            ->latest('published_at')
+            ->orderByRaw('COALESCE(published_at, created_at) DESC')
             ->paginate($perPage);
     }
 
@@ -26,7 +26,7 @@ class PostRepository
                     ->orWhere('excerpt', 'like', "%{$query}%");
             })
             ->with(['author', 'category'])
-            ->latest('published_at')
+            ->orderByRaw('COALESCE(published_at, created_at) DESC')
             ->paginate($perPage);
     }
 

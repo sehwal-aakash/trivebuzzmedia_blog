@@ -27,8 +27,10 @@ class PostService
             $data['featured_image'] = $data['featured_image']->store('posts', 'public');
         }
 
+        $statusValue = $data['status'] instanceof PostStatus ? $data['status']->value : ($data['status'] ?? null);
+
         // If status is published and published_at is not set or empty, set it to now
-        if ($data['status'] === PostStatus::PUBLISHED->value && empty($data['published_at'])) {
+        if ($statusValue === PostStatus::PUBLISHED->value && empty($data['published_at'])) {
             $data['published_at'] = now();
         }
 
@@ -64,8 +66,11 @@ class PostService
         }
 
         // Handle publishing logic
-        if (isset($data['status']) && $data['status'] === PostStatus::PUBLISHED->value) {
-            $data['published_at'] = ! empty($data['published_at']) ? $data['published_at'] : ($post->published_at ?? now());
+        if (isset($data['status'])) {
+            $statusValue = $data['status'] instanceof PostStatus ? $data['status']->value : $data['status'];
+            if ($statusValue === PostStatus::PUBLISHED->value) {
+                $data['published_at'] = ! empty($data['published_at']) ? $data['published_at'] : ($post->published_at ?? now());
+            }
         }
 
         // Ensure boolean values

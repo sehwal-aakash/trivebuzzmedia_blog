@@ -21,7 +21,7 @@ class PageController extends Controller
         $posts = Post::published()
             ->where('category_id', $category->id)
             ->with(['author', 'category'])
-            ->latest('published_at')
+            ->orderByRaw('COALESCE(published_at, created_at) DESC')
             ->paginate(10);
 
         $seoTags = $this->seoService->generateTags($category, [
@@ -47,7 +47,7 @@ class PageController extends Controller
                 $query->where('tags.id', $tag->id);
             })
             ->with(['author', 'category'])
-            ->latest('published_at')
+            ->orderByRaw('COALESCE(published_at, created_at) DESC')
             ->paginate(10);
 
         $seoTags = $this->seoService->generateTags($tag, [
