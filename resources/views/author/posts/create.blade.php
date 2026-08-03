@@ -5,9 +5,20 @@
 
 
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ ...aiAssistant(), ...imagePreview(), ...postEditor() }" x-init="initEditor()">
-        <form action="{{ route('author.posts.store') }}" method="POST" enctype="multipart/form-data">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ ...aiAssistant(), ...imagePreview(), ...postEditor() }" x-init="initEditor()" x-effect="onHtmlChange()">
+        <form action="{{ route('author.posts.store') }}" method="POST" enctype="multipart/form-data" @submit="onHtmlChange()">
             @csrf
+
+            @if ($errors->any())
+                <div class="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500">
+                    <h4 class="font-bold text-sm mb-1">Please fix the following errors before publishing:</h4>
+                    <ul class="list-disc list-inside text-xs space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             
             {{-- Header Action Bar --}}
             <div class="sticky top-0 z-40 bg-surface-50/90 dark:bg-[#0f1729]/90 backdrop-blur-md py-4 mb-8 border-b border-surface-200/70 dark:border-surface-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all">
