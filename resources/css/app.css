@@ -104,3 +104,67 @@ body {
     display: none !important;
 }
 
+/* Global Heading Hierarchy under Section */
+section h1,
+.prose h1 {
+    font-size: 2.25rem;
+    line-height: 1.25;
+    font-weight: 800;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-surface-900, #0f1729);
+}
+
+section h2,
+.prose h2 {
+    font-size: 1.875rem;
+    line-height: 1.3;
+    font-weight: 700;
+    margin-top: 1.75rem;
+    margin-bottom: 0.875rem;
+    color: var(--color-surface-900, #0f1729);
+}
+
+section h3,
+.prose h3 {
+    font-size: 1.5rem;
+    line-height: 1.35;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-surface-900, #0f1729);
+}
+
+section h4,
+.prose h4 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-surface-900, #0f1729);
+}
+
+section h5,
+.prose h5 {
+    font-size: 1.125rem;
+    line-height: 1.45;
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-surface-900, #0f1729);
+}
+
+.dark section h1,
+.dark section h2,
+.dark section h3,
+.dark section h4,
+.dark section h5,
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5 {
+    color: #ffffff;
+}
+

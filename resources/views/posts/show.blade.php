@@ -12,7 +12,7 @@
                 </span>
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-black text-surface-900 dark:text-white mb-10 leading-[1.05] tracking-tight">
+            <h1 class="text-4xl md:text-4xl font-bold text-surface-900 dark:text-white mb-10 leading-[1.25]">
                 {{ $post->title }}
             </h1>
 
@@ -97,8 +97,10 @@
     </aside>
 
     <div class="flex-1">
-        <div class="prose prose-lg md:prose-2xl prose-surface dark:prose-invert max-w-none mb-16 font-serif leading-relaxed">
-            {!! $post->content !!}
+        <div class="bg-white dark:bg-[#151f32] border border-surface-200/80 dark:border-surface-800/80 rounded-3xl p-6 md:p-10 shadow-xs mb-16">
+            <div class="prose prose-lg md:prose-2xl prose-surface dark:prose-invert max-w-none font-serif leading-relaxed">
+                {!! $post->content !!}
+            </div>
         </div>
 
         {{-- Sponsored Footer --}}

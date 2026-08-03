@@ -7,8 +7,8 @@
             <div class="flex items-center gap-10">
                 {{-- Logo --}}
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="group flex items-center gap-3">
-                        <img src="{{ asset('trivebuzzmedia-logo.png') }}" alt="TriveBuzz Media Logo" class="h-10 w-auto object-contain transition-transform group-hover:scale-105">
+                    <a href="{{ route('home') }}" class="group flex items-center gap-3 px-3 py-1.5 bg-white rounded-xl shadow-xs transition-all hover:bg-slate-100">
+                        <img src="{{ asset('trivebuzzmedia-logo.png') }}" alt="TriveBuzz Media Logo" class="h-9 w-auto object-contain transition-transform group-hover:scale-105">
                     </a>
                 </div>
 
