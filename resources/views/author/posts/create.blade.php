@@ -411,12 +411,15 @@
                         let scripts = '';
                         let body = raw;
 
-                        body = body.replace(/<style[\s\S]*?>([\s\S]*?)<\/style>/gi, (match, p1) => {
+                        const styleRegex = new RegExp('<style[\\s\\S]*?>([\\s\\S]*?)<\\/style>', 'gi');
+                        const scriptRegex = new RegExp('<script[\\s\\S]*?>([\\s\\S]*?)<\\/script>', 'gi');
+
+                        body = body.replace(styleRegex, (match, p1) => {
                             styles += p1.trim() + '\n';
                             return '';
                         });
 
-                        body = body.replace(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi, (match, p1) => {
+                        body = body.replace(scriptRegex, (match, p1) => {
                             scripts += p1.trim() + '\n';
                             return '';
                         });
@@ -429,13 +432,13 @@
                     getComposedHtml() {
                         let result = '';
                         if (this.htmlStyles && this.htmlStyles.trim()) {
-                            result += `<style>\n${this.htmlStyles.trim()}\n</style>\n\n`;
+                            result += '<style>\n' + this.htmlStyles.trim() + '\n</style>\n\n';
                         }
                         if (this.htmlContent) {
                             result += this.htmlContent;
                         }
                         if (this.htmlScripts && this.htmlScripts.trim()) {
-                            result += `\n\n<script>\n${this.htmlScripts.trim()}\n</script>`;
+                            result += '\n\n<script>\n' + this.htmlScripts.trim() + '\n<' + '/script>';
                         }
                         return result;
                     },
