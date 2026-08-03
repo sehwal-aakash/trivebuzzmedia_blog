@@ -54,3 +54,27 @@ test('post show page displays content', function () {
     $response->assertSee('This is the unique post content.');
     $response->assertSee($author->name);
 });
+
+test('published post with null or current published_at appears on homepage, category page, and trending', function () {
+    $author = User::factory()->create();
+    $category = Category::factory()->create(['name' => 'Technology Insights']);
+
+    $post = Post::factory()->create([
+        'author_id' => $author->id,
+        'category_id' => $category->id,
+        'status' => PostStatus::PUBLISHED,
+        'title' => 'Breakthrough Tech News',
+        'published_at' => null,
+    ]);
+
+    // Check homepage
+    $response = $this->get(route('home'));
+    $response->assertStatus(200);
+    $response->assertSee('Breakthrough Tech News');
+
+    // Check category page
+    $categoryResponse = $this->get(route('category.show', $category->slug));
+    $categoryResponse->assertStatus(200);
+    $categoryResponse->assertSee('Category: Technology Insights');
+    $categoryResponse->assertSee('Breakthrough Tech News');
+});

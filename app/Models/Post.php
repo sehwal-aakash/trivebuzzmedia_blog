@@ -85,7 +85,10 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('status', PostStatus::PUBLISHED)
-            ->where('published_at', '<=', now());
+            ->where(function ($q) {
+                $q->whereNull('published_at')
+                    ->orWhere('published_at', '<=', now());
+            });
     }
 
     public function scopeDraft($query)
@@ -101,11 +104,12 @@ class Post extends Model
     public function scopeScheduled($query)
     {
         return $query->where('status', PostStatus::PUBLISHED)
+            ->whereNotNull('published_at')
             ->where('published_at', '>', now());
     }
 
     public function scopeTrending($query)
     {
-        return $query->orderBy('view_count', 'desc');
+        return $query->orderBy('view_count', 'desc')->latest('published_at');
     }
 }

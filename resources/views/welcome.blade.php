@@ -1,6 +1,6 @@
 <x-layout :seoTags="$seoTags">
     {{-- Hero / Featured Section --}}
-    @if(!$query && $posts->count() > 0 && $posts->currentPage() == 1)
+    @if(!$query && !isset($activeCategory) && !isset($activeTag) && $posts->count() > 0 && $posts->currentPage() == 1)
         <div class="border-b border-slate-200/60 dark:border-slate-800/80 bg-gradient-to-b from-[#F8FAFC99] via-white to-surface-50 dark:from-[#0f1729] dark:via-[#111a2e] dark:to-[#0f1729] py-16 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -52,6 +52,10 @@
                         <h2 class="text-2xl md:text-3xl font-black text-[#0f1729] dark:text-white tracking-tight">
                             @if($query)
                                 Search: "{{ $query }}"
+                            @elseif(isset($activeCategory))
+                                Category: {{ $activeCategory->name }}
+                            @elseif(isset($activeTag))
+                                Tag: #{{ $activeTag->name }}
                             @else
                                 Latest Articles
                             @endif
@@ -75,8 +79,8 @@
 
                 <div class="space-y-6">
                     @forelse ($posts as $post)
-                        {{-- Skip the first post on page 1 if not searching, as it's featured above --}}
-                        @if(!$query && $posts->currentPage() == 1 && $loop->first)
+                        {{-- Skip the first post on page 1 if on home feed with no filter, as it's featured above --}}
+                        @if(!$query && !isset($activeCategory) && !isset($activeTag) && $posts->currentPage() == 1 && $loop->first)
                             @continue
                         @endif
                         <x-post-card :post="$post" />

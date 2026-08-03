@@ -35,6 +35,7 @@ class PageController extends Controller
             'posts' => $posts,
             'trendingPosts' => Post::published()->trending()->take(5)->get(),
             'query' => null,
+            'activeCategory' => $category,
             'seoTags' => $seoTags,
         ]);
     }
@@ -60,6 +61,7 @@ class PageController extends Controller
             'posts' => $posts,
             'trendingPosts' => Post::published()->trending()->take(5)->get(),
             'query' => null,
+            'activeTag' => $tag,
             'seoTags' => $seoTags,
         ]);
     }
