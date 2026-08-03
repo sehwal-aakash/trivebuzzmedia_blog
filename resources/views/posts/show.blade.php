@@ -69,12 +69,13 @@
             <div x-data="{ 
                 headings: [],
                 init() {
-                    this.headings = Array.from(document.querySelectorAll('.prose h2')).map(h => ({
+                    const elements = Array.from(document.querySelectorAll('.post-content h2, .post-content h3'));
+                    this.headings = elements.map(h => ({
                         text: h.innerText,
                         id: h.id || h.innerText.toLowerCase().replace(/[^a-z0-9]+/g, '-')
                     }));
                     this.headings.forEach((h, i) => {
-                        document.querySelectorAll('.prose h2')[i].id = h.id;
+                        elements[i].id = h.id;
                     });
                 }
             }" x-show="headings.length > 0">

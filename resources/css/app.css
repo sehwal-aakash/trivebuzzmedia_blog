@@ -44,6 +44,11 @@
 }
 
 /* Base custom enhancements */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6.5rem;
+}
+
 body {
     color: var(--e-global-color-text);
     background-color: var(--color-surface-50);
@@ -119,6 +124,27 @@ body {
 }
 
 /* Headings inside Post Content & Sections */
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6,
+section h1,
+section h2,
+section h3,
+section h4,
+section h5,
+section h6,
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+    scroll-margin-top: 6.5rem;
+}
+
 .post-content h1,
 section h1,
 .prose h1 {
