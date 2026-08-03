@@ -49,7 +49,7 @@
         </style>
     @endpush
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ ...aiAssistant(), ...imagePreview('{{ $post->featured_image ? Storage::url($post->featured_image) : '' }}') }">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" x-data="{ ...aiAssistant(), ...imagePreview('{{ $post->featured_image ? Storage::url($post->featured_image) : '' }}'), ...postEditor() }" x-init="initEditor()">
         <form action="{{ route('author.posts.update', $post) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -127,13 +127,98 @@
                             @enderror
                         </div>
 
-                        {{-- Main Rich Editor --}}
-                        <div class="space-y-2 pt-2">
-                            <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Story Body</label>
-                            <div class="p-4 md:p-6 bg-surface-50/40 dark:bg-slate-900/40 border border-surface-200/80 dark:border-surface-800 rounded-2xl prose prose-lg dark:prose-invert max-w-none min-h-[450px]">
-                                <input id="content" type="hidden" name="content" value="{{ old('content', $post->content) }}">
+                        {{-- Main Editor with Visual / HTML Switcher --}}
+                        <div class="space-y-3 pt-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Story Body</label>
+                                    <p class="text-[10px] text-surface-500 dark:text-surface-400 font-medium">Switch between Visual Rich Text Editor and Raw HTML Code view.</p>
+                                </div>
+
+                                {{-- Switcher Button Group --}}
+                                <div class="inline-flex p-1 bg-surface-100 dark:bg-slate-900 border border-surface-200 dark:border-surface-800 rounded-xl shadow-inner self-start sm:self-auto">
+                                    <button 
+                                        type="button"
+                                        @click="switchMode('editor')"
+                                        :class="editorMode === 'editor' ? 'bg-white dark:bg-[#151f32] text-brand dark:text-white shadow-xs font-black' : 'text-surface-500 hover:text-surface-900 dark:hover:text-white font-bold'"
+                                        class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs transition-all duration-150 cursor-pointer"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                        <span>Visual Editor</span>
+                                    </button>
+                                    <button 
+                                        type="button"
+                                        @click="switchMode('html')"
+                                        :class="editorMode === 'html' ? 'bg-white dark:bg-[#151f32] text-brand dark:text-white shadow-xs font-black' : 'text-surface-500 hover:text-surface-900 dark:hover:text-white font-bold'"
+                                        class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs transition-all duration-150 cursor-pointer"
+                                    >
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                        </svg>
+                                        <span>HTML Code</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {{-- Hidden Content Input for Form Submission --}}
+                            <input id="content" type="hidden" name="content" value="{{ old('content', $post->content) }}">
+
+                            {{-- Visual Editor Container --}}
+                            <div x-show="editorMode === 'editor'" x-cloak class="p-4 md:p-6 bg-surface-50/40 dark:bg-slate-900/40 border border-surface-200/80 dark:border-surface-800 rounded-2xl prose prose-lg dark:prose-invert max-w-none min-h-[450px]">
                                 <trix-editor input="content" placeholder="Tell your story... Write insights, format headings, or add quotes."></trix-editor>
                             </div>
+
+                            {{-- Main Big Box for HTML Editor --}}
+                            <div x-show="editorMode === 'html'" x-cloak class="rounded-2xl overflow-hidden border border-slate-800 shadow-xl bg-slate-950">
+                                {{-- Code Editor Control Bar --}}
+                                <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono">
+                                    <div class="flex items-center gap-2">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+                                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                                        </div>
+                                        <span class="ml-2 text-[11px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                                            HTML Source Code Box
+                                        </span>
+                                    </div>
+
+                                    {{-- Quick Tag Inserts --}}
+                                    <div class="flex items-center flex-wrap gap-1">
+                                        <span class="text-[10px] text-slate-500 font-sans uppercase font-bold mr-1">Insert:</span>
+                                        <button type="button" @click="insertTag('<p>', '</p>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;p&gt;</button>
+                                        <button type="button" @click="insertTag('<h2>', '</h2>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h2&gt;</button>
+                                        <button type="button" @click="insertTag('<h3>', '</h3>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h3&gt;</button>
+                                        <button type="button" @click="insertTag('<strong>', '</strong>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;b&gt;</button>
+                                        <button type="button" @click="insertTag('<a href=\'#\'>', '</a>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;a&gt;</button>
+                                        <button type="button" @click="insertTag('<img src=\'\' alt=\'\' />')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;img&gt;</button>
+                                        <button type="button" @click="insertTag('<blockquote>', '</blockquote>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;quote&gt;</button>
+                                        <button type="button" @click="insertTag('<pre><code>', '</code></pre>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;code&gt;</button>
+                                    </div>
+
+                                    <div class="flex items-center gap-3 ml-auto sm:ml-0">
+                                        <span class="text-[10px] text-slate-400 font-mono" x-text="htmlContent.length + ' chars'"></span>
+                                        <button type="button" @click="formatHtml()" class="px-2.5 py-1 bg-brand/20 hover:bg-brand/30 text-brand-light border border-brand/30 rounded-lg text-[10px] font-sans font-bold transition-all cursor-pointer">
+                                            ✨ Format HTML
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {{-- Main Big Textarea --}}
+                                <textarea
+                                    x-ref="htmlTextArea"
+                                    x-model="htmlContent"
+                                    @input="onHtmlInput($event)"
+                                    rows="18"
+                                    spellcheck="false"
+                                    class="w-full p-5 bg-slate-950 text-emerald-400 font-mono text-sm leading-relaxed border-none outline-none focus:outline-none focus:ring-0 min-h-[480px] resize-y placeholder-slate-600 selection:bg-brand/40"
+                                    placeholder="<!-- Write or paste raw HTML markup here -->&#10;<p>Add your story content directly in HTML...</p>"
+                                ></textarea>
+                            </div>
+
                             @error('content')
                                 <p class="mt-2 text-xs font-bold text-rose-500">{{ $message }}</p>
                             @enderror
@@ -346,6 +431,116 @@
     @push('scripts')
         <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
         <script>
+            function postEditor() {
+                return {
+                    editorMode: 'editor',
+                    htmlContent: '',
+
+                    initEditor() {
+                        const contentInput = document.getElementById('content');
+                        if (contentInput) {
+                            this.htmlContent = contentInput.value || '';
+                        }
+
+                        document.addEventListener('trix-change', () => {
+                            const contentInput = document.getElementById('content');
+                            if (contentInput && this.editorMode === 'editor') {
+                                this.htmlContent = contentInput.value;
+                            }
+                        });
+                    },
+
+                    switchMode(mode) {
+                        if (this.editorMode === mode) return;
+
+                        const contentInput = document.getElementById('content');
+                        const trixEl = document.querySelector('trix-editor');
+
+                        if (mode === 'html') {
+                            if (contentInput) {
+                                this.htmlContent = contentInput.value;
+                            }
+                            this.editorMode = 'html';
+                        } else if (mode === 'editor') {
+                            if (contentInput) {
+                                contentInput.value = this.htmlContent;
+                            }
+                            if (trixEl && trixEl.editor) {
+                                trixEl.editor.loadHTML(this.htmlContent || '');
+                            }
+                            this.editorMode = 'editor';
+                        }
+                    },
+
+                    onHtmlInput(event) {
+                        this.htmlContent = event.target.value;
+                        const contentInput = document.getElementById('content');
+                        if (contentInput) {
+                            contentInput.value = this.htmlContent;
+                        }
+                    },
+
+                    insertTag(openTag, closeTag = '') {
+                        const textarea = this.$refs.htmlTextArea;
+                        if (!textarea) {
+                            this.htmlContent += openTag + closeTag;
+                            return;
+                        }
+                        const start = textarea.selectionStart;
+                        const end = textarea.selectionEnd;
+                        const selectedText = this.htmlContent.substring(start, end);
+                        const replacement = openTag + (selectedText || '') + closeTag;
+                        this.htmlContent = this.htmlContent.substring(0, start) + replacement + this.htmlContent.substring(end);
+                        
+                        const contentInput = document.getElementById('content');
+                        if (contentInput) {
+                            contentInput.value = this.htmlContent;
+                        }
+
+                        this.$nextTick(() => {
+                            textarea.focus();
+                            const newCursorPos = start + openTag.length + (selectedText ? selectedText.length : 0);
+                            textarea.setSelectionRange(newCursorPos, newCursorPos);
+                        });
+                    },
+
+                    formatHtml() {
+                        if (!this.htmlContent) return;
+                        try {
+                            let formatted = '';
+                            let reg = /(>)(<)(\/*)/g;
+                            let xml = this.htmlContent.replace(reg, '$1\r\n$2$3');
+                            let pad = 0;
+                            xml.split('\r\n').forEach((node) => {
+                                let indent = 0;
+                                if (node.match(/.+<\/\w[^>]*>$/)) {
+                                    indent = 0;
+                                } else if (node.match(/^<\/\w/)) {
+                                    if (pad !== 0) pad -= 1;
+                                } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+                                    indent = 1;
+                                } else {
+                                    indent = 0;
+                                }
+                                let padding = '';
+                                for (let i = 0; i < pad; i++) {
+                                    padding += '  ';
+                                }
+                                formatted += padding + node + '\r\n';
+                                pad += indent;
+                            });
+                            this.htmlContent = formatted.trim();
+                            const contentInput = document.getElementById('content');
+                            if (contentInput) {
+                                contentInput.value = this.htmlContent;
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                }
+            }
+
             function imagePreview(initialUrl = '') {
                 return {
                     imageUrl: initialUrl || null,
