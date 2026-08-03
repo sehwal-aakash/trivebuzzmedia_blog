@@ -98,7 +98,7 @@
 
     <div class="flex-1">
         <div class="bg-white dark:bg-[#151f32] border border-surface-200/80 dark:border-surface-800/80 rounded-3xl p-6 md:p-10 shadow-xs mb-16">
-            <div class="prose prose-lg md:prose-2xl prose-surface dark:prose-invert max-w-none font-serif leading-relaxed">
+            <div class="post-content prose prose-lg md:prose-xl max-w-none">
                 {!! $post->content !!}
             </div>
         </div>
