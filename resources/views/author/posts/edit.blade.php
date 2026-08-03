@@ -184,7 +184,7 @@
                             @error('content')
                                 <p class="mt-2 text-xs font-bold text-rose-500">{{ $message }}</p>
                             @enderror
-                        </div>v>
+                        </div>
                     </div>
                 </div>
 
