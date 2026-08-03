@@ -131,7 +131,7 @@
                             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                                 <div>
                                     <label class="block text-[11px] font-black uppercase tracking-wider text-surface-400">Story Body</label>
-                                    <p class="text-[10px] text-surface-500 dark:text-surface-400 font-medium">Switch between Visual Rich Text Editor and Raw HTML Code view.</p>
+                                    <p class="text-[10px] text-surface-500 dark:text-surface-400 font-medium">Switch between Visual Rich Text Editor and Advanced HTML Code Mode.</p>
                                 </div>
 
                                 {{-- Switcher Button Group --}}
@@ -156,7 +156,7 @@
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
                                         </svg>
-                                        <span>HTML Code</span>
+                                        <span>HTML Mode</span>
                                     </button>
                                 </div>
                             </div>
@@ -164,58 +164,102 @@
                             {{-- Hidden Content Input for Form Submission --}}
                             <input id="content" type="hidden" name="content" value="{{ old('content') }}">
 
-                            {{-- Visual Editor Container --}}
+                            {{-- Mode 1: Visual Editor Container --}}
                             <div x-show="editorMode === 'editor'" x-cloak class="p-4 md:p-6 bg-surface-50/40 dark:bg-slate-900/40 border border-surface-200/80 dark:border-surface-800 rounded-2xl prose prose-lg dark:prose-invert max-w-none min-h-[450px]">
                                 <trix-editor input="content" placeholder="Tell your story... Write insights, format headings, or add quotes."></trix-editor>
                             </div>
 
-                            {{-- Main Big Box for HTML Editor --}}
-                            <div x-show="editorMode === 'html'" x-cloak class="rounded-2xl overflow-hidden border border-slate-800 shadow-xl bg-slate-950">
-                                {{-- Code Editor Control Bar --}}
-                                <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono">
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex items-center gap-1.5">
-                                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
-                                            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
-                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+                            {{-- Mode 2: HTML Mode with 3 Separate Code Boxes (styles, content, scripts) --}}
+                            <div x-show="editorMode === 'html'" x-cloak class="space-y-6">
+                                
+                                {{-- Header Info Banner --}}
+                                <div class="p-4 bg-slate-900 border border-slate-800 rounded-2xl flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold text-sm">
+                                            &lt;/&gt;
                                         </div>
-                                        <span class="ml-2 text-[11px] font-bold text-slate-300 uppercase tracking-widest flex items-center gap-1.5">
-                                            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                                            HTML Source Code Box
-                                        </span>
+                                        <div>
+                                            <h4 class="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Advanced HTML Code Mode</h4>
+                                            <p class="text-[10px] text-slate-400 font-sans">Separate boxes for CSS styles, HTML content, and JavaScript logic.</p>
+                                        </div>
                                     </div>
-
-                                    {{-- Quick Tag Inserts --}}
-                                    <div class="flex items-center flex-wrap gap-1">
-                                        <span class="text-[10px] text-slate-500 font-sans uppercase font-bold mr-1">Insert:</span>
-                                        <button type="button" @click="insertTag('<p>', '</p>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;p&gt;</button>
-                                        <button type="button" @click="insertTag('<h2>', '</h2>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h2&gt;</button>
-                                        <button type="button" @click="insertTag('<h3>', '</h3>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h3&gt;</button>
-                                        <button type="button" @click="insertTag('<strong>', '</strong>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;b&gt;</button>
-                                        <button type="button" @click="insertTag('<a href=\'#\'>', '</a>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;a&gt;</button>
-                                        <button type="button" @click="insertTag('<img src=\'\' alt=\'\' />')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;img&gt;</button>
-                                        <button type="button" @click="insertTag('<blockquote>', '</blockquote>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;quote&gt;</button>
-                                        <button type="button" @click="insertTag('<pre><code>', '</code></pre>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;code&gt;</button>
-                                    </div>
-
-                                    <div class="flex items-center gap-3 ml-auto sm:ml-0">
-                                        <span class="text-[10px] text-slate-400 font-mono" x-text="htmlContent.length + ' chars'"></span>
-                                        <button type="button" @click="formatHtml()" class="px-2.5 py-1 bg-brand/20 hover:bg-brand/30 text-brand-light border border-brand/30 rounded-lg text-[10px] font-sans font-bold transition-all cursor-pointer">
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" @click="formatHtml()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-sans font-bold border border-slate-700 transition-all cursor-pointer">
                                             ✨ Format HTML
                                         </button>
                                     </div>
                                 </div>
 
-                                {{-- Main Big Textarea --}}
-                                <textarea
-                                    x-ref="htmlTextArea"
-                                    x-model="htmlContent"
-                                    @input="onHtmlInput($event)"
-                                    rows="18"
-                                    spellcheck="false"
-                                    class="w-full p-5 bg-slate-950 text-emerald-400 font-mono text-sm leading-relaxed border-none outline-none focus:outline-none focus:ring-0 min-h-[480px] resize-y placeholder-slate-600 selection:bg-brand/40"
-                                    placeholder="<!-- Write or paste raw HTML markup here -->&#10;<p>Add your story content directly in HTML...</p>"
-                                ></textarea>
+                                {{-- Box 1: Styles (CSS) --}}
+                                <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-lg bg-slate-950">
+                                    <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span>
+                                            <span class="font-bold text-sky-300 uppercase tracking-widest text-[11px]">1. Styles (CSS)</span>
+                                        </div>
+                                        <span class="text-[10px] text-slate-500 font-sans">Embedded inside &lt;style&gt;&lt;/style&gt;</span>
+                                    </div>
+                                    <textarea
+                                        x-model="htmlStyles"
+                                        @input="onHtmlChange()"
+                                        rows="6"
+                                        spellcheck="false"
+                                        class="w-full p-4 bg-slate-950 text-sky-300 font-mono text-sm leading-relaxed border-none outline-none focus:outline-none focus:ring-0 min-h-[140px] resize-y placeholder-slate-600 selection:bg-sky-500/30"
+                                        placeholder="/* Enter custom CSS rules here (without <style> tags) */&#10;.my-custom-card { padding: 20px; background: #1e293b; border-radius: 12px; }&#10;.my-heading { color: #38bdf8; font-weight: 800; }"
+                                    ></textarea>
+                                </div>
+
+                                {{-- Box 2: Content (HTML) --}}
+                                <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-lg bg-slate-950">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                                            <span class="font-bold text-emerald-300 uppercase tracking-widest text-[11px]">2. Content (HTML Body)</span>
+                                        </div>
+
+                                        {{-- Quick Tag Inserts --}}
+                                        <div class="flex items-center flex-wrap gap-1">
+                                            <span class="text-[10px] text-slate-500 font-sans uppercase font-bold mr-1">Insert:</span>
+                                            <button type="button" @click="insertTag('<p>', '</p>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;p&gt;</button>
+                                            <button type="button" @click="insertTag('<h2>', '</h2>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h2&gt;</button>
+                                            <button type="button" @click="insertTag('<h3>', '</h3>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;h3&gt;</button>
+                                            <button type="button" @click="insertTag('<strong>', '</strong>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;b&gt;</button>
+                                            <button type="button" @click="insertTag('<a href=\'#\'>', '</a>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;a&gt;</button>
+                                            <button type="button" @click="insertTag('<img src=\'\' alt=\'\' />')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;img&gt;</button>
+                                            <button type="button" @click="insertTag('<div class=\'my-card\'>', '</div>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;div&gt;</button>
+                                            <button type="button" @click="insertTag('<blockquote>', '</blockquote>')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[11px] font-mono transition-all hover:text-white cursor-pointer">&lt;quote&gt;</button>
+                                        </div>
+                                    </div>
+                                    <textarea
+                                        x-ref="htmlContentTextArea"
+                                        x-model="htmlContent"
+                                        @input="onHtmlChange()"
+                                        rows="12"
+                                        spellcheck="false"
+                                        class="w-full p-4 bg-slate-950 text-emerald-400 font-mono text-sm leading-relaxed border-none outline-none focus:outline-none focus:ring-0 min-h-[300px] resize-y placeholder-slate-600 selection:bg-emerald-500/30"
+                                        placeholder="<!-- Write HTML body markup here -->&#10;<div class=&quot;my-custom-card&quot;>&#10;  <h2 class=&quot;my-heading&quot;>Hello World</h2>&#10;  <p>Write your article HTML content here...</p>&#10;</div>"
+                                    ></textarea>
+                                </div>
+
+                                {{-- Box 3: Scripts (JavaScript) --}}
+                                <div class="rounded-2xl overflow-hidden border border-slate-800 shadow-lg bg-slate-950">
+                                    <div class="flex items-center justify-between px-4 py-2.5 bg-slate-900 border-b border-slate-800 text-xs font-mono">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                            <span class="font-bold text-amber-300 uppercase tracking-widest text-[11px]">3. Scripts (JavaScript)</span>
+                                        </div>
+                                        <span class="text-[10px] text-slate-500 font-sans">Embedded inside &lt;script&gt;&lt;/script&gt;</span>
+                                    </div>
+                                    <textarea
+                                        x-model="htmlScripts"
+                                        @input="onHtmlChange()"
+                                        rows="6"
+                                        spellcheck="false"
+                                        class="w-full p-4 bg-slate-950 text-amber-300 font-mono text-sm leading-relaxed border-none outline-none focus:outline-none focus:ring-0 min-h-[140px] resize-y placeholder-slate-600 selection:bg-amber-500/30"
+                                        placeholder="// Enter custom JavaScript code here (without <script> tags)&#10;document.addEventListener('DOMContentLoaded', function() {&#10;  console.log('Post custom script executing...');&#10;});"
+                                    ></textarea>
+                                </div>
+
                             </div>
 
                             @error('content')
@@ -433,18 +477,30 @@
             function postEditor() {
                 return {
                     editorMode: 'editor',
+                    visualContent: '',
+                    htmlStyles: '',
                     htmlContent: '',
+                    htmlScripts: '',
 
                     initEditor() {
                         const contentInput = document.getElementById('content');
-                        if (contentInput) {
-                            this.htmlContent = contentInput.value || '';
+                        const initialVal = contentInput ? contentInput.value || '' : '';
+
+                        const hasStyleTag = /<style[\s\S]*?>[\s\S]*?<\/style>/i.test(initialVal);
+                        const hasScriptTag = /<script[\s\S]*?>[\s\S]*?<\/script>/i.test(initialVal);
+
+                        if (hasStyleTag || hasScriptTag) {
+                            this.editorMode = 'html';
+                            this.parseHtmlContent(initialVal);
+                        } else {
+                            this.visualContent = initialVal;
+                            this.htmlContent = initialVal;
                         }
 
                         document.addEventListener('trix-change', () => {
                             const contentInput = document.getElementById('content');
                             if (contentInput && this.editorMode === 'editor') {
-                                this.htmlContent = contentInput.value;
+                                this.visualContent = contentInput.value;
                             }
                         });
                     },
@@ -452,37 +508,66 @@
                     switchMode(mode) {
                         if (this.editorMode === mode) return;
 
-                        const contentInput = document.getElementById('content');
-                        const trixEl = document.querySelector('trix-editor');
+                        this.editorMode = mode;
+                        this.syncHiddenContent();
+                    },
 
-                        if (mode === 'html') {
-                            if (contentInput) {
-                                this.htmlContent = contentInput.value;
-                            }
-                            this.editorMode = 'html';
-                        } else if (mode === 'editor') {
-                            if (contentInput) {
-                                contentInput.value = this.htmlContent;
-                            }
-                            if (trixEl && trixEl.editor) {
-                                trixEl.editor.loadHTML(this.htmlContent || '');
-                            }
-                            this.editorMode = 'editor';
+                    parseHtmlContent(raw) {
+                        let styles = '';
+                        let scripts = '';
+                        let body = raw;
+
+                        body = body.replace(/<style[\s\S]*?>([\s\S]*?)<\/style>/gi, (match, p1) => {
+                            styles += p1.trim() + '\n';
+                            return '';
+                        });
+
+                        body = body.replace(/<script[\s\S]*?>([\s\S]*?)<\/script>/gi, (match, p1) => {
+                            scripts += p1.trim() + '\n';
+                            return '';
+                        });
+
+                        this.htmlStyles = styles.trim();
+                        this.htmlContent = body.trim();
+                        this.htmlScripts = scripts.trim();
+                    },
+
+                    getComposedHtml() {
+                        let result = '';
+                        if (this.htmlStyles && this.htmlStyles.trim()) {
+                            result += `<style>\n${this.htmlStyles.trim()}\n</style>\n\n`;
+                        }
+                        if (this.htmlContent) {
+                            result += this.htmlContent;
+                        }
+                        if (this.htmlScripts && this.htmlScripts.trim()) {
+                            result += `\n\n<script>\n${this.htmlScripts.trim()}\n</script>`;
+                        }
+                        return result;
+                    },
+
+                    onHtmlChange() {
+                        if (this.editorMode === 'html') {
+                            this.syncHiddenContent();
                         }
                     },
 
-                    onHtmlInput(event) {
-                        this.htmlContent = event.target.value;
+                    syncHiddenContent() {
                         const contentInput = document.getElementById('content');
-                        if (contentInput) {
-                            contentInput.value = this.htmlContent;
+                        if (!contentInput) return;
+
+                        if (this.editorMode === 'html') {
+                            contentInput.value = this.getComposedHtml();
+                        } else {
+                            contentInput.value = this.visualContent;
                         }
                     },
 
                     insertTag(openTag, closeTag = '') {
-                        const textarea = this.$refs.htmlTextArea;
+                        const textarea = this.$refs.htmlContentTextArea;
                         if (!textarea) {
                             this.htmlContent += openTag + closeTag;
+                            this.onHtmlChange();
                             return;
                         }
                         const start = textarea.selectionStart;
@@ -491,10 +576,7 @@
                         const replacement = openTag + (selectedText || '') + closeTag;
                         this.htmlContent = this.htmlContent.substring(0, start) + replacement + this.htmlContent.substring(end);
                         
-                        const contentInput = document.getElementById('content');
-                        if (contentInput) {
-                            contentInput.value = this.htmlContent;
-                        }
+                        this.onHtmlChange();
 
                         this.$nextTick(() => {
                             textarea.focus();
@@ -529,10 +611,7 @@
                                 pad += indent;
                             });
                             this.htmlContent = formatted.trim();
-                            const contentInput = document.getElementById('content');
-                            if (contentInput) {
-                                contentInput.value = this.htmlContent;
-                            }
+                            this.onHtmlChange();
                         } catch (e) {
                             console.error(e);
                         }
