@@ -304,8 +304,11 @@
                                     <p class="text-[10px] font-medium text-surface-400">PNG, JPG, WebP up to 5MB</p>
                                 </div>
                             </template>
-                            <input type="file" name="featured_image" @change="previewImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <input type="file" name="featured_image" accept="image/*" @change="previewImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
+                        @error('featured_image')
+                            <p class="text-xs font-bold text-rose-500 mt-2">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Topic / Category --}}

@@ -78,3 +78,27 @@ test('published post with null or current published_at appears on homepage, cate
     $categoryResponse->assertSee('Category: Technology Insights');
     $categoryResponse->assertSee('Breakthrough Tech News');
 });
+
+test('updating post without uploading new image preserves existing featured image', function () {
+    $author = User::factory()->author()->create();
+    $category = Category::factory()->create();
+
+    $post = Post::factory()->create([
+        'author_id' => $author->id,
+        'category_id' => $category->id,
+        'featured_image' => 'posts/original.jpg',
+        'status' => PostStatus::PUBLISHED,
+    ]);
+
+    $this->actingAs($author)
+        ->put(route('author.posts.update', $post), [
+            'title' => 'Updated Post Title',
+            'content' => '<p>Updated content body</p>',
+            'category_id' => $category->id,
+            'status' => PostStatus::PUBLISHED->value,
+        ])
+        ->assertRedirect(route('author.posts.index'));
+
+    $post->refresh();
+    expect($post->featured_image)->toBe('posts/original.jpg');
+});

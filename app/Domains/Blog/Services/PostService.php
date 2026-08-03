@@ -59,6 +59,8 @@ class PostService
                 Storage::disk('public')->delete($post->featured_image);
             }
             $data['featured_image'] = $data['featured_image']->store('posts', 'public');
+        } else {
+            unset($data['featured_image']);
         }
 
         // Handle publishing logic

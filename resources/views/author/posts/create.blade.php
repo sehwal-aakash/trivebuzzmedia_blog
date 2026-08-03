@@ -28,7 +28,7 @@
                     <div class="relative">
                         <select name="status" class="appearance-none pl-3.5 pr-8 py-2 bg-white dark:bg-[#151f32] border border-surface-200 dark:border-surface-800 rounded-xl text-xs font-bold text-surface-700 dark:text-surface-200 focus:outline-none focus:border-brand transition-all cursor-pointer">
                             @foreach(\App\Enums\PostStatus::cases() as $status)
-                                <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                                <option value="{{ $status->value }}" {{ old('status', 'published') == $status->value ? 'selected' : '' }}>
                                     {{ $status->label() }}
                                 </option>
                             @endforeach
@@ -303,8 +303,11 @@
                                     <p class="text-[10px] font-medium text-surface-400">PNG, JPG, WebP up to 5MB</p>
                                 </div>
                             </template>
-                            <input type="file" name="featured_image" @change="previewImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                            <input type="file" name="featured_image" accept="image/*" @change="previewImage($event)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
                         </div>
+                        @error('featured_image')
+                            <p class="text-xs font-bold text-rose-500 mt-2">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     {{-- Topic / Category --}}

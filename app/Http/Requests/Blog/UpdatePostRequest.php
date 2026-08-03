@@ -23,7 +23,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'category_id' => ['required', 'exists:categories,id'],
-            'featured_image' => ['nullable', 'image', 'max:2048'],
+            'featured_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:10240'],
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'content' => ['required', 'string'],
